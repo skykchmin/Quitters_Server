@@ -2,11 +2,11 @@ const mysql = require('mysql2/promise'); // mysql2 promise라는 모듈을 사�
 const {logger} = require('./winston');
 
 const pool = mysql.createPool({ // 기본적인 데이터베이스의 정보 
-    host: '3.35.8.165',
-    user: 'skykchmin',
+    host: 'database-1.chsdyx0zxa2z.ap-northeast-2.rds.amazonaws.com',
+    user: 'admin',
     port: 3306,
-    password: '1234',
-    database: 'Kream'
+    password: '12341234',
+    database: 'quitters'
 });
 
 module.exports = { // 만들어진 pool을 다른곳에서 이용할 수 있게 export를 해준다

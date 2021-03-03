@@ -9,6 +9,17 @@ const secret_config = require('../../../config/secret');
 const userDao = require('../dao/userDao');
 const { constants } = require('buffer');
 
+
+
+exports.test = async function (req, res) {
+    console.log("GET 메소드를 사용하는 /test 라우팅 연결이 성공하였습니다.");
+    res.json({"message" : "GET 메소드를 사용하는 /test 라우팅 연결이 성공하였습니다."});
+};
+
+
+
+
+
 /**
  update : 2020.10.4
  01.signUp API = 회원가입

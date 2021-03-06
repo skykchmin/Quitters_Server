@@ -125,3 +125,6 @@ dist
 *.code-workspace
 
 # End of https://www.toptal.com/developers/gitignore/api/vscode,node
+Server/node/src/app/controllers/boardController.js
+Server/node/src/app/dao/boardDao.js
+Server/node/src/app/routes/boardRoute.js

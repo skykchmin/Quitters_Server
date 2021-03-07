@@ -126,6 +126,10 @@ exports.deleteChallenge = async function (req, res) {
 exports.insertChallengeParticipation = async function (req, res) {
     // const { id } = req.verifiedToken;
    
+    const {
+        challengeCode
+    } = req.body;
+
     const challengeIdx = req.params.challengeIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
     const observerIdx = req.params.observerIdx; 
 
@@ -135,7 +139,16 @@ exports.insertChallengeParticipation = async function (req, res) {
     
         try {
             const challengeParticipationCodeRows = await challengeDao.challengeParticipationCodeCheck(challengeIdx); // 챌린지 참여코드 확인
-            console.log(challengeParticipationCodeRows)
+            console.log(challengeParticipationCodeRows[0].challengeCode) // 챌린지 참여 코드
+
+            //챌린지 코드 확인
+            if(challengeCode != challengeParticipationCodeRows[0].challengeCode){
+                return res.json({
+                    isSuccess: true,
+                    code: 2600,
+                    message: "챌린지 번호를 다시 입력해주세요"
+                });
+            }
 
             const insertDeclarerObserverInfoParams = [challengeIdx, observerIdx];
             const insertDeclarerObserverInfoRows = await declarerobserverDao.insertDeclarerObserverInfo(insertDeclarerObserverInfoParams);

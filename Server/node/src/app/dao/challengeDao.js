@@ -76,7 +76,7 @@ async function challengeParticipationCodeCheck(challengeIdx) {
   where challengeIdx = ?
   `;
   const challengeParticipationCodeCheckInfoParams = [challengeIdx]
-  const challengeParticipationCodeCheckInfoRows = await connection.query(
+  const [challengeParticipationCodeCheckInfoRows] = await connection.query(
     challengeParticipationCodeCheckInfoQuery,
     challengeParticipationCodeCheckInfoParams
   );

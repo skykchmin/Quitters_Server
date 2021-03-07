@@ -2,7 +2,7 @@ const {pool} = require('../../../config/database');
 const {logger} = require('../../../config/winston');
 
 const challengeDao = require('../dao/challengeDao');
-const declarerobserverDao = require('../dao/declarerobserverDao');
+// const declarerobserverDao = require('../dao/declarerobserverDao');
 const { constants } = require('buffer');
 
 
@@ -118,52 +118,6 @@ exports.deleteChallenge = async function (req, res) {
            // await connection.rollback(); // ROLLBACK
            // connection.release();
             logger.error(`App - 챌린지 삭제 Query error\n: ${err.message}`);
-            return res.status(4000).send(`Error: ${err.message}`);
-        }
-};
-
-// 챌린지 참가  
-exports.insertChallengeParticipation = async function (req, res) {
-    // const { id } = req.verifiedToken;
-   
-    const {
-        challengeCode
-    } = req.body;
-
-    const challengeIdx = req.params.challengeIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
-    const observerIdx = req.params.observerIdx; 
-
-    // if (checkString(challengeDeclarer) == false){
-    //     return res.json({isSuccess: false, code: 2501, message: "문자를 이용해주세요"});
-    // }
-    
-        try {
-            const challengeParticipationCodeRows = await challengeDao.challengeParticipationCodeCheck(challengeIdx); // 챌린지 참여코드 확인
-            console.log(challengeParticipationCodeRows[0].challengeCode) // 챌린지 참여 코드
-
-            //챌린지 코드 확인
-            if(challengeCode != challengeParticipationCodeRows[0].challengeCode){
-                return res.json({
-                    isSuccess: true,
-                    code: 2600,
-                    message: "챌린지 번호를 다시 입력해주세요"
-                });
-            }
-
-            const insertDeclarerObserverInfoParams = [challengeIdx, observerIdx];
-            const insertDeclarerObserverInfoRows = await declarerobserverDao.insertDeclarerObserverInfo(insertDeclarerObserverInfoParams);
-
-            return res.json({
-                isSuccess: true,
-                code: 1000,
-                message: "챌린지 참여 성공",
-                data: insertDeclarerObserverInfoRows
-
-            });
-        } catch (err) {
-           // await connection.rollback(); // ROLLBACK
-           // connection.release();
-            logger.error(`App - 챌린지 참여 Query error\n: ${err.message}`);
             return res.status(4000).send(`Error: ${err.message}`);
         }
 };

@@ -15,6 +15,25 @@ async function insertDeclarerObserverInfo(insertDeclarerObserverInfoParams) {
     return insertDeclarerObserverInfoRows;
   }
 
+// 챌린지 인원 확인
+async function challengeParticipationCheckNumber(challengeIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const challengeParticipationCheckNumberInfoQuery = `
+  select ObserverIdx
+  from declarerobserver
+  where challengeIdx = ?
+  `;
+  const challengeParticipationCheckNumberInfoParams = [challengeIdx]
+  const [challengeParticipationCheckNumberInfoRows] = await connection.query(
+    challengeParticipationCheckNumberInfoQuery,
+    challengeParticipationCheckNumberInfoParams
+  );
+  connection.release();
+  return challengeParticipationCheckNumberInfoRows;
+}
+
+
+
 // 감시자 삭제
 async function patchDeclarerObserverInfo(patchDeclarerObserverInfoParams) {
   const connection = await pool.getConnection(async (conn) => conn);
@@ -36,7 +55,10 @@ async function patchDeclarerObserverInfo(patchDeclarerObserverInfoParams) {
 }
 
 
+
+
 module.exports = {
     insertDeclarerObserverInfo,
-    patchDeclarerObserverInfo
+    patchDeclarerObserverInfo,
+    challengeParticipationCheckNumber
 };

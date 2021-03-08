@@ -84,10 +84,46 @@ async function challengeParticipationCodeCheck(challengeIdx) {
   return challengeParticipationCodeCheckInfoRows;
 }
 
+// 나의 챌린지
+async function getMyChallengeInfo(userIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const getMyChallengeInfoInfoQuery = `
+  select challengeDeclarer, challengeStartDate, challengeEndDate, challengeText
+  from challenge
+  where userIdx = ?;
+  `;
+  const getMyChallengeInfoInfoParams = [userIdx]
+  const getMyChallengeInfoInfoRows = await connection.query(
+    getMyChallengeInfoInfoQuery,
+    getMyChallengeInfoInfoParams
+  );
+  connection.release();
+  return getMyChallengeInfoInfoRows;
+}
+
+async function getFriendsChallengeInfo(observerIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const getFriendsChallengeInfoInfoQuery = `
+  select challengeDeclarer, challengeStartDate, challengeEndDate, challengeText, challengeStatus
+  from challenge
+  inner join declarerobserver d on challenge.challengeIdx = d.challengeIdx
+  where ObserverIdx = ?;
+  `;
+  const getFriendsChallengeInfoInfoParams = [observerIdx]
+  const getFriendsChallengeInfoInfoRows = await connection.query(
+    getFriendsChallengeInfoInfoQuery,
+    getFriendsChallengeInfoInfoParams
+  );
+  connection.release();
+  return getFriendsChallengeInfoInfoRows;
+}
+
 module.exports = {
     insertChallengeInfo,
     challengeCodeCheck,
     patchChallengeInfo,
     deleteChallengeInfo,
-    challengeParticipationCodeCheck
+    challengeParticipationCodeCheck,
+    getMyChallengeInfo,
+    getFriendsChallengeInfo
 };

@@ -61,7 +61,7 @@ exports.insertChallengeParticipation = async function (req, res) {
         }
 };
 
-// 챌린지 참여자 관리  
+// 챌린지 참여자 관리(선언자)
 exports.patchChallengeParticipation = async function (req, res) {
     // const { id } = req.verifiedToken;
    
@@ -87,3 +87,31 @@ exports.patchChallengeParticipation = async function (req, res) {
             return res.status(4000).send(`Error: ${err.message}`);
         }
 };
+
+// 챌린지 감시자 참여 중단
+exports.patchChallengeStopParticipation = async function (req, res) {
+    // const { id } = req.verifiedToken;
+   
+    const challengeIdx = req.params.challengeIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
+    const observerIdx = req.params.observerIdx; 
+    
+        try {
+            
+            const patchStopDeclarerObserverInfoParams = [challengeIdx, observerIdx];
+            const patchStopDeclarerObserverInfoRows = await declarerobserverDao.patchStopDeclarerObserverInfo(patchStopDeclarerObserverInfoParams);
+
+            return res.json({
+                isSuccess: true,
+                code: 1000,
+                message: "챌린지 감시자 참여중단 성공",
+                data: patchStopDeclarerObserverInfoRows
+
+            });
+        } catch (err) {
+           // await connection.rollback(); // ROLLBACK
+           // connection.release();
+            logger.error(`App - 챌린지 감시자 참여중단 Query error\n: ${err.message}`);
+            return res.status(4000).send(`Error: ${err.message}`);
+        }
+};
+

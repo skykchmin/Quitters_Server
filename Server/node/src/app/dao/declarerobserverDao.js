@@ -21,7 +21,7 @@ async function challengeParticipationCheckNumber(challengeIdx) {
   const challengeParticipationCheckNumberInfoQuery = `
   select ObserverIdx
   from declarerobserver
-  where challengeIdx = ?
+  where challengeIdx = ? and ObserverStatus = 'F'
   `;
   const challengeParticipationCheckNumberInfoParams = [challengeIdx]
   const [challengeParticipationCheckNumberInfoRows] = await connection.query(
@@ -33,8 +33,7 @@ async function challengeParticipationCheckNumber(challengeIdx) {
 }
 
 
-
-// 감시자 삭제
+// 선언자 감시자 삭제
 async function patchDeclarerObserverInfo(patchDeclarerObserverInfoParams) {
   const connection = await pool.getConnection(async (conn) => conn);
   const patchDeclarerObserverInfoQuery = `
@@ -54,11 +53,32 @@ async function patchDeclarerObserverInfo(patchDeclarerObserverInfoParams) {
   return patchDeclarerObserverInfoRows;
 }
 
+// 감시자 참여중단
+async function patchStopDeclarerObserverInfo(patchStopDeclarerObserverInfoParams) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const patchStopDeclarerObserverInfoQuery = `
+  update declarerobserver
+  set ObserverStatus =
+    case
+        when ObserverStatus = 'F' then 'N'
+        when ObserverStatus = 'N' then 'F'
+    end
+  where challengeIdx = ? and ObserverIdx = ?;
+  `;
+  const patchStopDeclarerObserverInfoRows = await connection.query(
+    patchStopDeclarerObserverInfoQuery,
+    patchStopDeclarerObserverInfoParams
+  );
+  connection.release();
+  return patchStopDeclarerObserverInfoRows;
+}
+
 
 
 
 module.exports = {
     insertDeclarerObserverInfo,
     patchDeclarerObserverInfo,
-    challengeParticipationCheckNumber
+    challengeParticipationCheckNumber,
+    patchStopDeclarerObserverInfo
 };

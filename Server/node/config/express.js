@@ -21,6 +21,8 @@ module.exports = function () {
     require('../src/app/routes/userRoute')(app);
     require('../src/app/routes/challengeRoute')(app);
     require('../src/app/routes/declarerobserverRoute')(app);
+    require('../src/app/routes/socialRoute')(app);
+
     /* Web */
     // require('../src/web/routes/indexRoute')(app);
 

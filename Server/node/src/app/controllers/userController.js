@@ -165,7 +165,7 @@ exports.signIn = async function (req, res) {
     return res.json({isSuccess: false, code: 2022, message: "id에 공백을 제거해주세요"});
 
     if (checkSpecial(id)) 
-    return res.json({isSuccess: false, code: 2023, message: "id에 특수문자는 들어갈 수 없습니다."});
+    return res.json({isSuccess: false, code: 2023, message: "id에 특수문자는 들어갈 수 없습니다. 소셜 로그인 회원은 소셜 로그인란을 이용해주세요"});
 
     if (checkLanguage(id)) 
     return res.json({isSuccess: false, code: 2024, message: "id에는 영문과 숫자만 이용해주세요."});
@@ -180,6 +180,13 @@ exports.signIn = async function (req, res) {
                     isSuccess: false,
                     code: 2035,
                     message: "아이디를 확인해주세요."
+                });
+            }
+            if(userInfoRows[0].userLoginMethod == 1 || userInfoRows[0].userLoginMethod == 2){
+                return res.json({
+                    isSuccess: false,
+                    code: 3030,
+                    message: "소셜 로그인 회원은 소셜 로그인란을 이용해주세요"
                 });
             }
 
@@ -204,6 +211,7 @@ exports.signIn = async function (req, res) {
                     message: "탈퇴 된 계정입니다. 고객센터에 문의해주세요."
                 });
             }
+            
             //토큰 생성
             let token = await jwt.sign({
                     id: userInfoRows[0].userIdx,

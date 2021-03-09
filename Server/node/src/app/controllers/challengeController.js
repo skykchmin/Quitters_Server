@@ -121,3 +121,30 @@ exports.deleteChallenge = async function (req, res) {
             return res.status(4000).send(`Error: ${err.message}`);
         }
 };
+
+// 메인
+exports.getMain = async function (req, res) {
+    // const { id } = req.verifiedToken;
+
+    const UserIdx = req.params.userIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
+    const ObserverIdx = req.params.userIdx;
+
+        try {
+            
+            const getMyChallengeInfoRows = await challengeDao.getMyChallengeInfo(UserIdx); // 나의 챌린지 조회
+            const getFriendsChallengeInfoRows = await challengeDao.getFriendsChallengeInfo(ObserverIdx); // 친구의 챌린지 조회
+
+            return res.json({
+                isSuccess: true,
+                code: 1000,
+                message: "메인 조회 성공",
+                myChallenge: getMyChallengeInfoRows[0],
+                friendsChallenge: getFriendsChallengeInfoRows[0]
+            });
+        } catch (err) {
+           // await connection.rollback(); // ROLLBACK
+           // connection.release();
+            logger.error(`App - 메인 조회 Query error\n: ${err.message}`);
+            return res.status(4000).send(`Error: ${err.message}`);
+        }
+};

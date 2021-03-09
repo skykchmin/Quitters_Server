@@ -21,14 +21,24 @@ exports.insertChallengeParticipation = async function (req, res) {
     // }
     
         try {
+            const challengeParticipationCheckNumberRows = await declarerobserverDao.challengeParticipationCheckNumber(challengeIdx); // 챌린지 참여인원 확인
+            // 챌린지 참여 인원이 8명 이상일 경우
+            if (challengeParticipationCheckNumberRows.length > 8){
+                return res.json({
+                    isSuccess: false,
+                    code: 2600,
+                    message: "감시자는 8명 이상 추가할 수 없습니다"
+                });
+            }
+            
             const challengeParticipationCodeRows = await challengeDao.challengeParticipationCodeCheck(challengeIdx); // 챌린지 참여코드 확인
             console.log(challengeParticipationCodeRows[0].challengeCode) // 챌린지 참여 코드
 
             //챌린지 코드 확인
             if(challengeCode != challengeParticipationCodeRows[0].challengeCode){
                 return res.json({
-                    isSuccess: true,
-                    code: 2600,
+                    isSuccess: false,
+                    code: 2601,
                     message: "챌린지 번호를 다시 입력해주세요"
                 });
             }
@@ -51,7 +61,7 @@ exports.insertChallengeParticipation = async function (req, res) {
         }
 };
 
-// 챌린지 참여자 관리  
+// 챌린지 참여자 관리(선언자)
 exports.patchChallengeParticipation = async function (req, res) {
     // const { id } = req.verifiedToken;
    
@@ -77,3 +87,31 @@ exports.patchChallengeParticipation = async function (req, res) {
             return res.status(4000).send(`Error: ${err.message}`);
         }
 };
+
+// 챌린지 감시자 참여 중단
+exports.patchChallengeStopParticipation = async function (req, res) {
+    // const { id } = req.verifiedToken;
+   
+    const challengeIdx = req.params.challengeIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
+    const observerIdx = req.params.observerIdx; 
+    
+        try {
+            
+            const patchStopDeclarerObserverInfoParams = [challengeIdx, observerIdx];
+            const patchStopDeclarerObserverInfoRows = await declarerobserverDao.patchStopDeclarerObserverInfo(patchStopDeclarerObserverInfoParams);
+
+            return res.json({
+                isSuccess: true,
+                code: 1000,
+                message: "챌린지 감시자 참여중단 성공",
+                data: patchStopDeclarerObserverInfoRows
+
+            });
+        } catch (err) {
+           // await connection.rollback(); // ROLLBACK
+           // connection.release();
+            logger.error(`App - 챌린지 감시자 참여중단 Query error\n: ${err.message}`);
+            return res.status(4000).send(`Error: ${err.message}`);
+        }
+};
+

@@ -1,7 +1,8 @@
-const {pool} = require('../../../config/database');
-const {logger} = require('../../../config/winston');
+const { pool } = require('../../../config/database');
+const { logger } = require('../../../config/winston');
 
 const challengeDao = require('../dao/challengeDao');
+const challengecertificationDao = require('../dao/challengecertificationDao');
 const declarerobserverDao = require('../dao/declarerobserverDao');
 const { constants } = require('buffer');
 
@@ -16,11 +17,15 @@ exports.insertChallengeParticipation = async function (req, res) {
     const challengeIdx = req.params.challengeIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
     const observerIdx = req.params.observerIdx; 
 
+    const connection = await pool.getConnection(); // 트랜잭션 시작
+
     // if (checkString(challengeDeclarer) == false){
     //     return res.json({isSuccess: false, code: 2501, message: "문자를 이용해주세요"});
     // }
     
         try {
+            
+
             const challengeParticipationCheckNumberRows = await declarerobserverDao.challengeParticipationCheckNumber(challengeIdx); // 챌린지 참여인원 확인
             // 챌린지 참여 인원이 8명 이상일 경우
             if (challengeParticipationCheckNumberRows.length > 8){
@@ -31,6 +36,8 @@ exports.insertChallengeParticipation = async function (req, res) {
                 });
             }
             
+            await connection.beginTransaction();
+
             const challengeParticipationCodeRows = await challengeDao.challengeParticipationCodeCheck(challengeIdx); // 챌린지 참여코드 확인
             console.log(challengeParticipationCodeRows[0].challengeCode) // 챌린지 참여 코드
 
@@ -46,18 +53,23 @@ exports.insertChallengeParticipation = async function (req, res) {
             const insertDeclarerObserverInfoParams = [challengeIdx, observerIdx];
             const insertDeclarerObserverInfoRows = await declarerobserverDao.insertDeclarerObserverInfo(insertDeclarerObserverInfoParams);
 
+            const insertChallengeCertificationInfoParams = [challengeIdx, observerIdx];
+            const insertChallengeCertificationInfoRows = await challengecertificationDao.insertChallengeCertificationInfo(insertChallengeCertificationInfoParams);
+
+            await connection.commit();
+
             return res.json({
                 isSuccess: true,
                 code: 1000,
                 message: "챌린지 참여 성공",
-                data: insertDeclarerObserverInfoRows
 
             });
         } catch (err) {
-           // await connection.rollback(); // ROLLBACK
-           // connection.release();
+           await connection.rollback(); // ROLLBACK
             logger.error(`App - 챌린지 참여 Query error\n: ${err.message}`);
             return res.status(4000).send(`Error: ${err.message}`);
+        } finally {
+            connection.release();
         }
 };
 

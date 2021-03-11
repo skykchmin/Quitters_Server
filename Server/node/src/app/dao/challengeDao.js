@@ -88,7 +88,7 @@ async function challengeParticipationCodeCheck(challengeIdx) {
 async function getMyChallengeInfo(userIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getMyChallengeInfoInfoQuery = `
-  select challengeDeclarer, challengeStartDate, challengeEndDate, challengeText
+  select challengeIdx, challengeDeclarer, challengeStartDate, challengeEndDate, challengeText
   from challenge
   where userIdx = ?;
   `;
@@ -104,7 +104,7 @@ async function getMyChallengeInfo(userIdx) {
 async function getFriendsChallengeInfo(observerIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getFriendsChallengeInfoInfoQuery = `
-  select challengeDeclarer, challengeStartDate, challengeEndDate, challengeText, challengeStatus
+  select challenge.challengeIdx, challengeDeclarer, challengeStartDate, challengeEndDate, challengeText, challengeStatus
   from challenge
   inner join declarerobserver d on challenge.challengeIdx = d.challengeIdx
   where ObserverIdx = ?;

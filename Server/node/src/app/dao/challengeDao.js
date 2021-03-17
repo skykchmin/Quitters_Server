@@ -118,6 +118,23 @@ async function getFriendsChallengeInfo(observerIdx) {
   return getFriendsChallengeInfoInfoRows;
 }
 
+// 챌린지 상세 조회 
+async function getChallengeDetailInfo(challengeIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const getChallengeDetailInfoQuery = `
+  select challengeDeclarer, challengeText, savingMoney, challengeCreateTime, challengeStartDate, challengeEndDate
+  from challenge
+  where challengeIdx = ?;
+  `;
+  const getChallengeDetailInfoParams = [challengeIdx]
+  const getChallengeDetailInfoRows = await connection.query(
+    getChallengeDetailInfoQuery,
+    getChallengeDetailInfoParams
+  );
+  connection.release();
+  return getChallengeDetailInfoRows;
+}
+
 // 참여중인 감시자
 async function getChallengeDeclarerInfo(challengeIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
@@ -136,6 +153,8 @@ async function getChallengeDeclarerInfo(challengeIdx) {
   return getChallengeDeclarerInfoRows;
 }
 
+
+
 module.exports = {
     insertChallengeInfo,
     challengeCodeCheck,
@@ -144,5 +163,7 @@ module.exports = {
     challengeParticipationCodeCheck,
     getMyChallengeInfo,
     getFriendsChallengeInfo,
-    getChallengeDeclarerInfo
+    getChallengeDetailInfo,
+    getChallengeDeclarerInfo,
+    
 };

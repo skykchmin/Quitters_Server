@@ -159,7 +159,7 @@ exports.getChallengeDetail = async function (req, res) {
         try {
             await connection.beginTransaction(); // 트랜잭션 시작
 
-            const getChallengeCheckListContentInfoRows = await challengecertificationDao.getChallengeCheckListContentInfo(challengeIdx); // 챌린지 인증목록 상단 챌린지 내용 확인
+            const getChallengeDetailInfoRows = await challengeDao.getChallengeDetailInfo(challengeIdx) // 챌린지 인증목록 상단 챌린지 내용 확인
             const getChallengeIntermediateCertification_0InfoRows = await challengecertificationDao.getChallengeIntermediateCertification_0Info(challengeIdx); // 챌린지 중간 인증 확인
             const getChallengeIntermediateCertification_4InfoRows = await challengecertificationDao.getChallengeIntermediateCertification_4Info(challengeIdx); // 챌린지 중간 인증 확인
             const getChallengeIntermediateCertification_8InfoRows = await challengecertificationDao.getChallengeIntermediateCertification_8Info(challengeIdx); // 챌린지 중간 인증 확인
@@ -173,7 +173,7 @@ exports.getChallengeDetail = async function (req, res) {
                 isSuccess: true,
                 code: 1000,
                 message: "챌린지 상세조회 성공",
-                challengeContent: getChallengeCheckListContentInfoRows[0],
+                challengeContent: getChallengeDetailInfoRows[0],
                 challengeIntermediateCertificationStatus_0: getChallengeIntermediateCertification_0InfoRows[0],
                 challengeIntermediateCertificationStatus_4: getChallengeIntermediateCertification_4InfoRows[0],
                 challengeIntermediateCertificationStatus_8: getChallengeIntermediateCertification_8InfoRows[0],

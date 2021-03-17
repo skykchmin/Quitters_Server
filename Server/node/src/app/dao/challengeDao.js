@@ -88,7 +88,7 @@ async function challengeParticipationCodeCheck(challengeIdx) {
 async function getMyChallengeInfo(userIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getMyChallengeInfoInfoQuery = `
-  select challengeIdx, challengeDeclarer, challengeStartDate, challengeEndDate, challengeText
+  select challengeIdx, challengeDeclarer, challengeStartDate, challengeEndDate, challengeText 
   from challenge
   where userIdx = ?;
   `;
@@ -118,6 +118,24 @@ async function getFriendsChallengeInfo(observerIdx) {
   return getFriendsChallengeInfoInfoRows;
 }
 
+// 참여중인 감시자
+async function getChallengeDeclarerInfo(challengeIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const getChallengeDeclarerInfoQuery = `
+  select userNickName, userProfilePicture, observerIdx
+  from declarerobserver
+  inner join user on user.userIdx = declarerobserver.ObserverIdx
+  where challengeIdx = ? and ObserverStatus ='F'
+  `;
+  const getChallengeDeclarerInfoParams = [challengeIdx]
+  const getChallengeDeclarerInfoRows = await connection.query(
+    getChallengeDeclarerInfoQuery,
+    getChallengeDeclarerInfoParams
+  );
+  connection.release();
+  return getChallengeDeclarerInfoRows;
+}
+
 module.exports = {
     insertChallengeInfo,
     challengeCodeCheck,
@@ -125,5 +143,6 @@ module.exports = {
     deleteChallengeInfo,
     challengeParticipationCodeCheck,
     getMyChallengeInfo,
-    getFriendsChallengeInfo
+    getFriendsChallengeInfo,
+    getChallengeDeclarerInfo
 };

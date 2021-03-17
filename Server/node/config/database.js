@@ -6,11 +6,12 @@ const pool = mysql.createPool({ // 기본적인 데이터베이스의 정보
     user: 'admin',
     port: 3306,
     password: '12341234',
-    database: 'quitters'
+    database: 'quitters',
+    dateStrings: 'date'
 });
 
 module.exports = { // 만들어진 pool을 다른곳에서 이용할 수 있게 export를 해준다
-    pool: pool
+    pool: pool,
 };
 
 

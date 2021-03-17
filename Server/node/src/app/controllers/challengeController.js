@@ -2,6 +2,7 @@ const {pool} = require('../../../config/database');
 const {logger} = require('../../../config/winston');
 
 const challengeDao = require('../dao/challengeDao');
+const challengecertificationDao = require('../dao/challengecertificationDao');
 // const declarerobserverDao = require('../dao/declarerobserverDao');
 const { constants } = require('buffer');
 
@@ -147,4 +148,47 @@ exports.getMain = async function (req, res) {
             logger.error(`App - 메인 조회 Query error\n: ${err.message}`);
             return res.status(4000).send(`Error: ${err.message}`);
         }
+};
+
+// 챌린지 상세조회
+exports.getChallengeDetail = async function (req, res) {
+    // const { id } = req.verifiedToken;
+    const challengeIdx = req.params.challengeIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
+    const connection = await pool.getConnection(); // 트랜잭션 정의
+    
+        try {
+            await connection.beginTransaction(); // 트랜잭션 시작
+
+            const getChallengeCheckListContentInfoRows = await challengecertificationDao.getChallengeCheckListContentInfo(challengeIdx); // 챌린지 인증목록 상단 챌린지 내용 확인
+            const getChallengeIntermediateCertification_0InfoRows = await challengecertificationDao.getChallengeIntermediateCertification_0Info(challengeIdx); // 챌린지 중간 인증 확인
+            const getChallengeIntermediateCertification_4InfoRows = await challengecertificationDao.getChallengeIntermediateCertification_4Info(challengeIdx); // 챌린지 중간 인증 확인
+            const getChallengeIntermediateCertification_8InfoRows = await challengecertificationDao.getChallengeIntermediateCertification_8Info(challengeIdx); // 챌린지 중간 인증 확인
+            const getChallengeIntermediateCertification_12InfoRows = await challengecertificationDao.getChallengeIntermediateCertification_12Info(challengeIdx); // 챌린지 중간 인증 확인
+            const getChallengeIntermediateCertification_16InfoRows = await challengecertificationDao.getChallengeIntermediateCertification_16Info(challengeIdx); // 챌린지 중간 인증 확인
+            const getChallengeIntermediateCertification_20InfoRows = await challengecertificationDao.getChallengeIntermediateCertification_20Info(challengeIdx); // 챌린지 중간 인증 확인
+            const getChallengeDeclarerInfoRows = await challengeDao.getChallengeDeclarerInfo(challengeIdx);
+
+            await connection.commit();
+            return res.json({
+                isSuccess: true,
+                code: 1000,
+                message: "챌린지 상세조회 성공",
+                challengeContent: getChallengeCheckListContentInfoRows[0],
+                challengeIntermediateCertificationStatus_0: getChallengeIntermediateCertification_0InfoRows[0],
+                challengeIntermediateCertificationStatus_4: getChallengeIntermediateCertification_4InfoRows[0],
+                challengeIntermediateCertificationStatus_8: getChallengeIntermediateCertification_8InfoRows[0],
+                challengeIntermediateCertificationStatus_12: getChallengeIntermediateCertification_12InfoRows[0],
+                challengeIntermediateCertificationStatus_16: getChallengeIntermediateCertification_16InfoRows[0],
+                challengeIntermediateCertificationStatus_20: getChallengeIntermediateCertification_20InfoRows[0],
+                challengeDeclarerInfo: getChallengeDeclarerInfoRows[0]
+            });
+        } catch (err) {
+            await connection.rollback(); // ROLLBACK
+           // connection.release();
+            logger.error(`App - 챌린지 상세조회 성공" Query error\n: ${err.message}`);
+            return res.status(4000).send(`Error: ${err.message}`);
+        } finally {
+            connection.release();
+        }
+      
 };

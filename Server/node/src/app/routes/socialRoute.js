@@ -4,5 +4,6 @@ module.exports = function(app){
 
     
     app.post('/users/kakao',social.getKakao);
+    app.post('/users/google',social.getGoogle);
 
 };

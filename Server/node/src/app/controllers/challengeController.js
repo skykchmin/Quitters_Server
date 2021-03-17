@@ -166,7 +166,7 @@ exports.getChallengeDetail = async function (req, res) {
             const getChallengeIntermediateCertification_12InfoRows = await challengecertificationDao.getChallengeIntermediateCertification_12Info(challengeIdx); // 챌린지 중간 인증 확인
             const getChallengeIntermediateCertification_16InfoRows = await challengecertificationDao.getChallengeIntermediateCertification_16Info(challengeIdx); // 챌린지 중간 인증 확인
             const getChallengeIntermediateCertification_20InfoRows = await challengecertificationDao.getChallengeIntermediateCertification_20Info(challengeIdx); // 챌린지 중간 인증 확인
-            const getChallengeDeclarerInfoRows = await challengeDao.getChallengeDeclarerInfo(challengeIdx);
+            const getChallengeObserverInfoRows = await challengeDao.getChallengeObserverInfo(challengeIdx);
 
             await connection.commit();
             return res.json({
@@ -180,7 +180,7 @@ exports.getChallengeDetail = async function (req, res) {
                 challengeIntermediateCertificationStatus_12: getChallengeIntermediateCertification_12InfoRows[0],
                 challengeIntermediateCertificationStatus_16: getChallengeIntermediateCertification_16InfoRows[0],
                 challengeIntermediateCertificationStatus_20: getChallengeIntermediateCertification_20InfoRows[0],
-                challengeDeclarerInfo: getChallengeDeclarerInfoRows[0]
+                challengeObserverInfo: getChallengeObserverInfoRows[0]
             });
         } catch (err) {
             await connection.rollback(); // ROLLBACK

@@ -136,21 +136,21 @@ async function getChallengeDetailInfo(challengeIdx) {
 }
 
 // 참여중인 감시자
-async function getChallengeDeclarerInfo(challengeIdx) {
+async function getChallengeObserverInfo(challengeIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const getChallengeDeclarerInfoQuery = `
+  const getChallengeObserverInfoQuery = `
   select userNickName, userProfilePicture, observerIdx
   from declarerobserver
   inner join user on user.userIdx = declarerobserver.ObserverIdx
   where challengeIdx = ? and ObserverStatus ='F'
   `;
-  const getChallengeDeclarerInfoParams = [challengeIdx]
-  const getChallengeDeclarerInfoRows = await connection.query(
-    getChallengeDeclarerInfoQuery,
-    getChallengeDeclarerInfoParams
+  const getChallengeObserverInfoParams = [challengeIdx]
+  const getChallengeObserverInfoRows = await connection.query(
+    getChallengeObserverInfoQuery,
+    getChallengeObserverInfoParams
   );
   connection.release();
-  return getChallengeDeclarerInfoRows;
+  return getChallengeObserverInfoRows;
 }
 
 
@@ -164,6 +164,6 @@ module.exports = {
     getMyChallengeInfo,
     getFriendsChallengeInfo,
     getChallengeDetailInfo,
-    getChallengeDeclarerInfo,
+    getChallengeObserverInfo,
     
 };

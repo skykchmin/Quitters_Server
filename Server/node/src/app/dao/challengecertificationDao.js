@@ -60,7 +60,7 @@ async function getChallengeCheckListContentInfo(challengeIdx) {
   `;
   
   const getChallengeCheckListContentInfoParams = [challengeIdx]
-  const [getChallengeCheckListContentInfoRows] = await connection.query(
+  const getChallengeCheckListContentInfoRows = await connection.query(
     getChallengeCheckListContentInfoQuery,
     getChallengeCheckListContentInfoParams
   );
@@ -197,7 +197,7 @@ async function getChallengeIntermediateCertification_0Info(getChallengeIntermedi
   where challengeIdx = ? and createdAt between concat(curdate(), ' 00:00:00') and concat(curdate(), ' 03:59:59');
   `;
   
-  const [getChallengeIntermediateCertification_0InfoRows] = await connection.query(
+  const getChallengeIntermediateCertification_0InfoRows = await connection.query(
     getChallengeIntermediateCertification_0InfoQuery,
     getChallengeIntermediateCertification_0InfoParams
   );
@@ -214,7 +214,7 @@ async function getChallengeIntermediateCertification_4Info(getChallengeIntermedi
   where challengeIdx = ? and createdAt between concat(curdate(), ' 04:00:00') and concat(curdate(), ' 07:59:59');
   `;
   
-  const [getChallengeIntermediateCertification_4InfoRows] = await connection.query(
+  const getChallengeIntermediateCertification_4InfoRows = await connection.query(
     getChallengeIntermediateCertification_4InfoQuery,
     getChallengeIntermediateCertification_4InfoParams
   );
@@ -231,7 +231,7 @@ async function getChallengeIntermediateCertification_8Info(getChallengeIntermedi
   where challengeIdx = ? and createdAt between concat(curdate(), ' 08:00:00') and concat(curdate(), ' 11:59:59');
   `;
   
-  const [getChallengeIntermediateCertification_8InfoRows] = await connection.query(
+  const getChallengeIntermediateCertification_8InfoRows = await connection.query(
     getChallengeIntermediateCertification_8InfoQuery,
     getChallengeIntermediateCertification_8InfoParams
   );
@@ -248,7 +248,7 @@ async function getChallengeIntermediateCertification_12Info(getChallengeIntermed
   where challengeIdx = ? and createdAt between concat(curdate(), ' 12:00:00') and concat(curdate(), ' 15:59:59');
   `;
   
-  const [getChallengeIntermediateCertification_12InfoRows] = await connection.query(
+  const getChallengeIntermediateCertification_12InfoRows = await connection.query(
     getChallengeIntermediateCertification_12InfoQuery,
     getChallengeIntermediateCertification_12InfoParams
   );
@@ -265,7 +265,7 @@ async function getChallengeIntermediateCertification_16Info(getChallengeIntermed
   where challengeIdx = ? and createdAt between concat(curdate(), ' 16:00:00') and concat(curdate(), ' 19:59:59');
   `;
   
-  const [getChallengeIntermediateCertification_16InfoRows] = await connection.query(
+  const getChallengeIntermediateCertification_16InfoRows = await connection.query(
     getChallengeIntermediateCertification_16InfoQuery,
     getChallengeIntermediateCertification_16InfoParams
   );
@@ -282,7 +282,7 @@ async function getChallengeIntermediateCertification_20Info(getChallengeIntermed
   where challengeIdx = ? and createdAt between concat(curdate(), ' 20:00:00') and concat(curdate(), ' 23:59:59');
   `;
   
-  const [getChallengeIntermediateCertification_20InfoRows] = await connection.query(
+  const getChallengeIntermediateCertification_20InfoRows = await connection.query(
     getChallengeIntermediateCertification_20InfoQuery,
     getChallengeIntermediateCertification_20InfoParams
   );
@@ -292,12 +292,12 @@ async function getChallengeIntermediateCertification_20Info(getChallengeIntermed
 
 
 // 성공 즉시 실행
-async function patchChallengeIntermediateCertificationSuccessInfo(challengeIdx) {
+async function patchChallengeIntermediateCertificationSuccessInfo_0(challengeIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
   const patchChallengeIntermediateCertificationInfoInfoQuery = `
-  update challengeintermediatecertification
+  update challengeintermediatecertification ci
   set ChallengeIntermediateCertificationStatus = '1'
-  where challengeIdx = ?;
+  where challengeIdx = ? and ci.createdAt between concat(curdate(), ' 00:00:00') and concat(curdate(), ' 03:59:59');
   `;
   
   const patchChallengeIntermediateCertificationInfoParams = [challengeIdx];
@@ -348,5 +348,5 @@ module.exports = {
     getChallengeIntermediateCertification_12Info,
     getChallengeIntermediateCertification_16Info,
     getChallengeIntermediateCertification_20Info,
-    patchChallengeIntermediateCertificationSuccessInfo
+    patchChallengeIntermediateCertificationSuccessInfo_0
 };

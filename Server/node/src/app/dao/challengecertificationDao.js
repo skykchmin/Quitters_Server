@@ -291,24 +291,362 @@ async function getChallengeIntermediateCertification_20Info(getChallengeIntermed
 }
 
 
-// 성공 즉시 실행
+// 0~4시 중간 인증 자동전환 - 성공
 async function patchChallengeIntermediateCertificationSuccessInfo_0(challengeIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const patchChallengeIntermediateCertificationInfoInfoQuery = `
+  const patchChallengeIntermediateCertificationInfoInfoQuery_0 = `
   update challengeintermediatecertification ci
   set ChallengeIntermediateCertificationStatus = '1'
   where challengeIdx = ? and ci.createdAt between concat(curdate(), ' 00:00:00') and concat(curdate(), ' 03:59:59');
   `;
   
-  const patchChallengeIntermediateCertificationInfoParams = [challengeIdx];
-  const patchChallengeIntermediateCertificationInfoInfoRows = await connection.query(
-    patchChallengeIntermediateCertificationInfoInfoQuery,
-    patchChallengeIntermediateCertificationInfoParams
+  const patchChallengeIntermediateCertificationInfoParams_0 = [challengeIdx];
+  const patchChallengeIntermediateCertificationInfoInfoRows_0 = await connection.query(
+    patchChallengeIntermediateCertificationInfoInfoQuery_0,
+    patchChallengeIntermediateCertificationInfoParams_0
   );
   connection.release();
-  return patchChallengeIntermediateCertificationInfoInfoRows;
+  return patchChallengeIntermediateCertificationInfoInfoRows_0;
 }
 
+// 4~8시 중간 인증 자동전환 - 성공
+async function patchChallengeIntermediateCertificationSuccessInfo_4(challengeIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const patchChallengeIntermediateCertificationInfoInfoQuery_4 = `
+  update challengeintermediatecertification ci
+  set ChallengeIntermediateCertificationStatus = '1'
+  where challengeIdx = ? and ci.createdAt between concat(curdate(), ' 04:00:00') and concat(curdate(), ' 07:59:59');
+  `;
+  
+  const patchChallengeIntermediateCertificationInfoParams_4 = [challengeIdx];
+  const patchChallengeIntermediateCertificationInfoInfoRows_4 = await connection.query(
+    patchChallengeIntermediateCertificationInfoInfoQuery_4,
+    patchChallengeIntermediateCertificationInfoParams_4
+  );
+  connection.release();
+  return patchChallengeIntermediateCertificationInfoInfoRows_4;
+}
+
+// 8~12시 중간 인증 자동전환 - 성공
+async function patchChallengeIntermediateCertificationSuccessInfo_8(challengeIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const patchChallengeIntermediateCertificationInfoInfoQuery_8 = `
+  update challengeintermediatecertification ci
+  set ChallengeIntermediateCertificationStatus = '1'
+  where challengeIdx = ? and ci.createdAt between concat(curdate(), ' 08:00:00') and concat(curdate(), ' 11:59:59');
+  `;
+  
+  const patchChallengeIntermediateCertificationInfoParams_8 = [challengeIdx];
+  const patchChallengeIntermediateCertificationInfoInfoRows_8 = await connection.query(
+    patchChallengeIntermediateCertificationInfoInfoQuery_8,
+    patchChallengeIntermediateCertificationInfoParams_8
+  );
+  connection.release();
+  return patchChallengeIntermediateCertificationInfoInfoRows_8;
+}
+
+// 12~16시 중간 인증 자동전환 - 성공
+async function patchChallengeIntermediateCertificationSuccessInfo_12(challengeIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const patchChallengeIntermediateCertificationInfoInfoQuery_12 = `
+  update challengeintermediatecertification ci
+  set ChallengeIntermediateCertificationStatus = '1'
+  where challengeIdx = ? and ci.createdAt between concat(curdate(), ' 12:00:00') and concat(curdate(), ' 15:59:59');
+  `;
+  
+  const patchChallengeIntermediateCertificationInfoParams_12 = [challengeIdx];
+  const patchChallengeIntermediateCertificationInfoInfoRows_12 = await connection.query(
+    patchChallengeIntermediateCertificationInfoInfoQuery_12,
+    patchChallengeIntermediateCertificationInfoParams_12
+  );
+  connection.release();
+  return patchChallengeIntermediateCertificationInfoInfoRows_12;
+}
+
+// 16~20시 중간 인증 자동전환 - 성공
+async function patchChallengeIntermediateCertificationSuccessInfo_16(challengeIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const patchChallengeIntermediateCertificationInfoInfoQuery = `
+  update challengeintermediatecertification ci
+  set ChallengeIntermediateCertificationStatus = '1'
+  where challengeIdx = ? and ci.createdAt between concat(curdate(), ' 16:00:00') and concat(curdate(), ' 19:59:59');
+  `;
+  
+  const patchChallengeIntermediateCertificationInfoParams_16 = [challengeIdx];
+  const patchChallengeIntermediateCertificationInfoInfoRows_16 = await connection.query(
+    patchChallengeIntermediateCertificationInfoInfoQuery_16,
+    patchChallengeIntermediateCertificationInfoParams_16
+  );
+  connection.release();
+  return patchChallengeIntermediateCertificationInfoInfoRows_16;
+}
+
+// 20~24시 중간 인증 자동전환 - 성공
+async function patchChallengeIntermediateCertificationSuccessInfo_20(challengeIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const patchChallengeIntermediateCertificationInfoInfoQuery_20 = `
+  update challengeintermediatecertification ci
+  set ChallengeIntermediateCertificationStatus = '1'
+  where challengeIdx = ? and ci.createdAt between concat(curdate(), ' 20:00:00') and concat(curdate(), ' 23:59:59');
+  `;
+  
+  const patchChallengeIntermediateCertificationInfoParams_20 = [challengeIdx];
+  const patchChallengeIntermediateCertificationInfoInfoRows_20 = await connection.query(
+    patchChallengeIntermediateCertificationInfoInfoQuery_20,
+    patchChallengeIntermediateCertificationInfoParams_20
+  );
+  connection.release();
+  return patchChallengeIntermediateCertificationInfoInfoRows_20;
+}
+
+
+/// 0~4시 사용자 입력에 따른 인증
+async function patchChallengeCertificationInfo_0(patchChallengeCertificationInfoParams) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const patchChallengeCertificationInfoQuery_0 = `
+  update challengecertification
+  set challengeCertificationStatus = ?
+  where challengeIdx = ? and observerIdx = ? and createdAt between concat(curdate(), ' 00:00:00') and concat(curdate(), ' 03:59:59');
+  `;
+  
+  const patchChallengeCertificationInfoRows_0 = await connection.query(
+    patchChallengeCertificationInfoQuery_0,
+    patchChallengeCertificationInfoParams
+  );
+  connection.release();
+  return patchChallengeCertificationInfoRows_0;
+}
+
+/// 4~8시 사용자 입력에 따른 인증
+async function patchChallengeCertificationInfo_4(patchChallengeCertificationInfoParams) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const patchChallengeCertificationInfoQuery_4 = `
+  update challengecertification
+  set challengeCertificationStatus = ?
+  where challengeIdx = ? and observerIdx = ? and createdAt between concat(curdate(), ' 04:00:00') and concat(curdate(), ' 07:59:59');
+  `;
+  
+  const patchChallengeCertificationInfoRows_4 = await connection.query(
+    patchChallengeCertificationInfoQuery_4,
+    patchChallengeCertificationInfoParams
+  );
+  connection.release();
+  return patchChallengeCertificationInfoRows_4;
+}
+
+/// 8~12시 사용자 입력에 따른 인증
+async function patchChallengeCertificationInfo_8(patchChallengeCertificationInfoParams) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const patchChallengeCertificationInfoQuery_8 = `
+  update challengecertification
+  set challengeCertificationStatus = ?
+  where challengeIdx = ? and observerIdx = ? and createdAt between concat(curdate(), ' 08:00:00') and concat(curdate(), ' 11:59:59');
+  `;
+  
+  const patchChallengeCertificationInfoRows_8 = await connection.query(
+    patchChallengeCertificationInfoQuery_8,
+    patchChallengeCertificationInfoParams
+  );
+  connection.release();
+  return patchChallengeCertificationInfoRows_8;
+}
+
+/// 12~16시 사용자 입력에 따른 인증
+async function patchChallengeCertificationInfo_12(patchChallengeCertificationInfoParams) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const patchChallengeCertificationInfoQuery_12 = `
+  update challengecertification
+  set challengeCertificationStatus = ?
+  where challengeIdx = ? and observerIdx = ? and createdAt between concat(curdate(), ' 12:00:00') and concat(curdate(), ' 15:59:59');
+  `;
+  
+  const patchChallengeCertificationInfoRows_12 = await connection.query(
+    patchChallengeCertificationInfoQuery_12,
+    patchChallengeCertificationInfoParams
+  );
+  connection.release();
+  return patchChallengeCertificationInfoRows_12;
+}
+
+/// 16~20시 사용자 입력에 따른 인증
+async function patchChallengeCertificationInfo_16(patchChallengeCertificationInfoParams) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const patchChallengeCertificationInfoQuery_16 = `
+  update challengecertification
+  set challengeCertificationStatus = ?
+  where challengeIdx = ? and observerIdx = ? and createdAt between concat(curdate(), ' 16:00:00') and concat(curdate(), ' 19:59:59');
+  `;
+  
+  const patchChallengeCertificationInfoRows_16 = await connection.query(
+    patchChallengeCertificationInfoQuery_16,
+    patchChallengeCertificationInfoParams
+  );
+  connection.release();
+  return patchChallengeCertificationInfoRows_16;
+}
+
+/// 20~24시 사용자 입력에 따른 인증
+async function patchChallengeCertificationInfo_20(patchChallengeCertificationInfoParams) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const patchChallengeCertificationInfoQuery_20 = `
+  update challengecertification
+  set challengeCertificationStatus = ?
+  where challengeIdx = ? and observerIdx = ? and createdAt between concat(curdate(), ' 20:00:00') and concat(curdate(), ' 23:59:59');
+  `;
+  
+  const patchChallengeCertificationInfoRows_20 = await connection.query(
+    patchChallengeCertificationInfoQuery_20,
+    patchChallengeCertificationInfoParams
+  );
+  connection.release();
+  return patchChallengeCertificationInfoRows_20;
+}
+
+
+
+// 0~4시 챌린지 중간 인증 실패 전환
+async function patchChallengeIntermediateCertificationFailInfo_0(challengeIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const patchChallengeIntermediateCertificationFailInfoQuery_0 = `
+  update challengeintermediatecertification ci
+  set ChallengeIntermediateCertificationStatus = '2'
+  where challengeIdx = ? and ci.createdAt between concat(curdate(), ' 00:00:00') and concat(curdate(), ' 03:59:59');
+  `;
+  
+  const patchChallengeIntermediateCertificationFailInfoParams_0 = [challengeIdx];
+  const patchChallengeIntermediateCertificationFailInfoRows_0 = await connection.query(
+    patchChallengeIntermediateCertificationFailInfoQuery_0,
+    patchChallengeIntermediateCertificationFailInfoParams_0
+  );
+  connection.release();
+  return patchChallengeIntermediateCertificationFailInfoRows_0;
+}
+
+// 0~4시 챌린지 중간 인증 실패 전환
+async function patchChallengeIntermediateCertificationFailInfo_0(challengeIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const patchChallengeIntermediateCertificationFailInfoQuery_0 = `
+  update challengeintermediatecertification ci
+  set ChallengeIntermediateCertificationStatus = '2'
+  where challengeIdx = ? and ci.createdAt between concat(curdate(), ' 00:00:00') and concat(curdate(), ' 03:59:59');
+  `;
+  
+  const patchChallengeIntermediateCertificationFailInfoParams_0 = [challengeIdx];
+  const patchChallengeIntermediateCertificationFailInfoRows_0 = await connection.query(
+    patchChallengeIntermediateCertificationFailInfoQuery_0,
+    patchChallengeIntermediateCertificationFailInfoParams_0
+  );
+  connection.release();
+  return patchChallengeIntermediateCertificationFailInfoRows_0;
+}
+
+// 4~8시 챌린지 중간 인증 실패 전환
+async function patchChallengeIntermediateCertificationFailInfo_4(challengeIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const patchChallengeIntermediateCertificationFailInfoQuery_4 = `
+  update challengeintermediatecertification ci
+  set ChallengeIntermediateCertificationStatus = '2'
+  where challengeIdx = ? and ci.createdAt between concat(curdate(), ' 04:00:00') and concat(curdate(), ' 07:59:59');
+  `;
+  
+  const patchChallengeIntermediateCertificationFailInfoParams_4 = [challengeIdx];
+  const patchChallengeIntermediateCertificationFailInfoRows_4 = await connection.query(
+    patchChallengeIntermediateCertificationFailInfoQuery_4,
+    patchChallengeIntermediateCertificationFailInfoParams_4
+  );
+  connection.release();
+  return patchChallengeIntermediateCertificationFailInfoRows_4;
+}
+
+// 8~12시 챌린지 중간 인증 실패 전환
+async function patchChallengeIntermediateCertificationFailInfo_8(challengeIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const patchChallengeIntermediateCertificationFailInfoQuery_8 = `
+  update challengeintermediatecertification ci
+  set ChallengeIntermediateCertificationStatus = '2'
+  where challengeIdx = ? and ci.createdAt between concat(curdate(), ' 08:00:00') and concat(curdate(), ' 11:59:59');
+  `;
+  
+  const patchChallengeIntermediateCertificationFailInfoParams_8 = [challengeIdx];
+  const patchChallengeIntermediateCertificationFailInfoRows_8 = await connection.query(
+    patchChallengeIntermediateCertificationFailInfoQuery_8,
+    patchChallengeIntermediateCertificationFailInfoParams_8
+  );
+  connection.release();
+  return patchChallengeIntermediateCertificationFailInfoRows_8;
+}
+
+// 12~16시 챌린지 중간 인증 실패 전환
+async function patchChallengeIntermediateCertificationFailInfo_12(challengeIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const patchChallengeIntermediateCertificationFailInfoQuery_12 = `
+  update challengeintermediatecertification ci
+  set ChallengeIntermediateCertificationStatus = '2'
+  where challengeIdx = ? and ci.createdAt between concat(curdate(), ' 12:00:00') and concat(curdate(), ' 15:59:59');
+  `;
+  
+  const patchChallengeIntermediateCertificationFailInfoParams_12 = [challengeIdx];
+  const patchChallengeIntermediateCertificationFailInfoRows_12 = await connection.query(
+    patchChallengeIntermediateCertificationFailInfoQuery_12,
+    patchChallengeIntermediateCertificationFailInfoParams_12
+  );
+  connection.release();
+  return patchChallengeIntermediateCertificationFailInfoRows_12;
+}
+
+// 16~20시 챌린지 중간 인증 실패 전환
+async function patchChallengeIntermediateCertificationFailInfo_16(challengeIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const patchChallengeIntermediateCertificationFailInfoQuery_16 = `
+  update challengeintermediatecertification ci
+  set ChallengeIntermediateCertificationStatus = '2'
+  where challengeIdx = ? and ci.createdAt between concat(curdate(), ' 00:00:00') and concat(curdate(), ' 03:59:59');
+  `;
+  
+  const patchChallengeIntermediateCertificationFailInfoParams_16 = [challengeIdx];
+  const patchChallengeIntermediateCertificationFailInfoRows_16 = await connection.query(
+    patchChallengeIntermediateCertificationFailInfoQuery_16,
+    patchChallengeIntermediateCertificationFailInfoParams_16
+  );
+  connection.release();
+  return patchChallengeIntermediateCertificationFailInfoRows_16;
+}
+
+// 20~24시 챌린지 중간 인증 실패 전환
+async function patchChallengeIntermediateCertificationFailInfo_20(challengeIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const patchChallengeIntermediateCertificationFailInfoQuery_20 = `
+  update challengeintermediatecertification ci
+  set ChallengeIntermediateCertificationStatus = '2'
+  where challengeIdx = ? and ci.createdAt between concat(curdate(), ' 20:00:00') and concat(curdate(), ' 23:59:59');
+  `;
+  
+  const patchChallengeIntermediateCertificationFailInfoParams_20 = [challengeIdx];
+  const patchChallengeIntermediateCertificationFailInfoRows_20 = await connection.query(
+    patchChallengeIntermediateCertificationFailInfoQuery_20,
+    patchChallengeIntermediateCertificationFailInfoParams_20
+  );
+  connection.release();
+  return patchChallengeIntermediateCertificationFailInfoRows_20;
+}
+
+
+// 챌린지 실패 전환(사용자 입력)
+async function patchChallengeFailInfo(patchChallengeFailInfoParams) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const patchChallengeFailInfoQuery = `
+  update challenge
+  set shareState = '1', challengeStatus = '2', challengeFailText = ?
+  where challengeIdx = ?;
+  `;
+  
+  const patchChallengeFailInfoRows = await connection.query(
+    patchChallengeFailInfoQuery,
+    patchChallengeFailInfoParams
+  );
+  connection.release();
+  return patchChallengeFailInfoRows;
+}
 
 
 // 선언자 - 감시자에서 챌린지 번호, 감시자 번호 뽑아내기 - 테스트용
@@ -348,5 +686,27 @@ module.exports = {
     getChallengeIntermediateCertification_12Info,
     getChallengeIntermediateCertification_16Info,
     getChallengeIntermediateCertification_20Info,
-    patchChallengeIntermediateCertificationSuccessInfo_0
+    
+    patchChallengeIntermediateCertificationSuccessInfo_0,
+    patchChallengeIntermediateCertificationSuccessInfo_4,
+    patchChallengeIntermediateCertificationSuccessInfo_8,
+    patchChallengeIntermediateCertificationSuccessInfo_12,
+    patchChallengeIntermediateCertificationSuccessInfo_16,
+    patchChallengeIntermediateCertificationSuccessInfo_20,
+
+    patchChallengeIntermediateCertificationFailInfo_0,
+    patchChallengeIntermediateCertificationFailInfo_4,
+    patchChallengeIntermediateCertificationFailInfo_8,
+    patchChallengeIntermediateCertificationFailInfo_12,
+    patchChallengeIntermediateCertificationFailInfo_16,
+    patchChallengeIntermediateCertificationFailInfo_20,
+
+    patchChallengeCertificationInfo_0,
+    patchChallengeCertificationInfo_4,
+    patchChallengeCertificationInfo_8,
+    patchChallengeCertificationInfo_12,
+    patchChallengeCertificationInfo_16,
+    patchChallengeCertificationInfo_20,
+
+    patchChallengeFailInfo
 };

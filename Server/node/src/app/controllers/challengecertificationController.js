@@ -173,64 +173,306 @@ exports.getChallengeCertification = async function (req, res) {
     }  
 };
 
-// 중간 인증 상태 변화(자동)
-exports.patchAutoChallengeIntermediateCertification = async function (req, res) {
+// 중간 인증 상태 변화(사용자 입력)
+exports.patchChallengeCertification = async function (req, res) {
     // const { id } = req.verifiedToken;
+
+    const {
+        challengeCertificationStatus, challengeFailText
+    } = req.body;
+
     const challengeIdx = req.params.challengeIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
+    const observerIdx = req.params.observerIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
     const timeNumber = req.params.timeNumber; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
+    
     const connection = await pool.getConnection(); // 트랜잭션 정의
     var excludingFailureStatusCount = 0; // 실패를 제외한 횟수 
 
+    var patchChallengeCertificationInfoParams = [challengeCertificationStatus, challengeIdx, observerIdx];
+    var patchChallengeFailInfoParams = [challengeFailText, challengeIdx];
+    if (!challengeCertificationStatus) return res.json({isSuccess: false, code: 2101, message: "챌린지 인증 상태를 입력해주세요"});
+    if (challengeFailText.length > 60){
+        return res.json({
+            isSuccess: false,
+            code: 2102,
+            message: "실패사유는 60자리 미만으로 입력해주세요.",
+          });
+    }
         try {
             await connection.beginTransaction(); // 트랜잭션 시작
 
-            const getChallengeCertification_0InfoRows = await challengecertificationDao.getChallengeCertification_0Info(challengeIdx); //
+            if(timeNumber == 0){
+                if(challengeCertificationStatus == '3'){ // 실패일 경우 
+                    const patchChallengeCertificationInfoRows_0 = await challengecertificationDao.patchChallengeCertificationInfo_0(patchChallengeCertificationInfoParams); // 챌린지 인증 상태 변경
+                    const patchChallengeFailInfoRows = await challengecertificationDao.patchChallengeFailInfo(patchChallengeFailInfoParams); // 챌린지 실패 전환 - 즉시 실패 전환
+                    const patchChallengeIntermediateCertificationFailInfoRows_0 = await challengecertificationDao.patchChallengeIntermediateCertificationFailInfo_0(challengeIdx); // 챌린지 중간 인증 실패
 
-            // // 전부 성공일 경우
-            for(var i = 0; i <getChallengeCertification_0InfoRows[0].length; i++){
-                // console.log(getChallengeCertification_0InfoRows[0][i].challengeCertificationStatus);
-                // console.log(getChallengeCertification_0InfoRows[0][i]);
-                console.log(getChallengeCertification_0InfoRows[0][i].challengeCertificationStatus); // string
-                
-                // if(getChallengeCertification_0InfoRows[0][i].challengeCertificationStatus == '1'){
-                //     successStatusCount++;
-                // }
-                
-            }
+                    return res.json({
+                        isSuccess: true,
+                        code: 1000,
+                        message: "챌린지 중간 상태(사용자입력)-실패 변경 성공"
+                    });
+                }
+                else{ // 실패를 제외한 경우
+                    var successStatusCount = 0
 
-            // console.log("성공 갯수" + successStatusCount);
-            // console.log("길이" + getChallengeCertification_0InfoRows[0].length);
+                    const patchChallengeCertificationInfoRows_0 = await challengecertificationDao.patchChallengeCertificationInfo_0(patchChallengeCertificationInfoParams); // 챌린지 인증 상태 변경
+                    const getChallengeCertification_0InfoRows = await challengecertificationDao.getChallengeCertification_0Info(challengeIdx); // 챌린지 조회 
+                    
+                    for(var i = 0; i<getChallengeCertification_0InfoRows[0].length; i++){
+                        // console.log(getChallengeCertification_0InfoRows[0][i]);
+                        // console.log(getChallengeCertification_0InfoRows[0][i].challengeCertificationStatus);
 
-            // if(successStatusCount == getChallengeCertification_0InfoRows[0].length){
-            //     console.log("챌린지 중간 상태 성공(모두 성공) 전환!");
-            //     const patchChallengeIntermediateCertificationInfoRows = await challengecertificationDao.patchChallengeIntermediateCertificationSuccessInfo(challengeIdx); // 챌린지 중간 상태 성공 전환
-            // }
+                        if(getChallengeCertification_0InfoRows[0][i].challengeCertificationStatus == '1'){
+                            successStatusCount++;
+                        }
+                        
+                    }
+                    // console.log("성공 갯수" + successStatusCount);
+                    // console.log("길이" + getChallengeCertification_0InfoRows[0].length);
+                    
+                    // 모두 성공일 경우 - 즉시 전환
+                    if(successStatusCount == getChallengeCertification_0InfoRows[0].length){
+                        const patchChallengeIntermediateCertificationInfoRows = await challengecertificationDao.patchChallengeIntermediateCertificationSuccessInfo_0(challengeIdx); // 챌린지 중간 상태 성공 전환
+                        successStatusCount = 0; // 초기화
+                        console.log("챌린지 중간 상태 성공(모두 성공) 전환!");
+                    }
 
-            // 성공, 몰라요가 섞여 있을 경우 
-            for(var i = 0; i <getChallengeCertification_0InfoRows[0].length; i++){
-                // console.log(getChallengeCertification_0InfoRows[0][i]);
-                if(getChallengeCertification_0InfoRows[0][i].challengeCertificationStatus != '3' ){
-                    excludingFailureStatusCount++;
+                    return res.json({
+                        isSuccess: true,
+                        code: 1000,
+                        message: "챌린지 중간 상태(사용자입력) 변경 성공"
+                    });
                 }
                 
             }
+            else if(timeNumber == 4){
+                if(challengeCertificationStatus == '3'){ // 실패일 경우 
+                    const patchChallengeCertificationInfoRows_4 = await challengecertificationDao.patchChallengeCertificationInfo_4(patchChallengeCertificationInfoParams); // 챌린지 인증 상태 변경
+                    const patchChallengeFailInfoRows = await challengecertificationDao.patchChallengeFailInfo(patchChallengeFailInfoParams); // 챌린지 실패 전환 - 즉시 실패 전환
+                    const patchChallengeIntermediateCertificationFailInfoRows_4 = await challengecertificationDao.patchChallengeIntermediateCertificationFailInfo_4(challengeIdx); // 챌린지 중간 인증 실패
 
-            if(excludingFailureStatusCount == getChallengeCertification_0InfoRows[0].length){
-                console.log("챌린지 중간 상태 성공(자동) 전환!");
-                const patchChallengeIntermediateCertificationInfoRows = await challengecertificationDao.patchChallengeIntermediateCertificationSuccessInfo(challengeIdx); // 챌린지 중간 상태 성공 전환
+                    return res.json({
+                        isSuccess: true,
+                        code: 1000,
+                        message: "챌린지 중간 상태(사용자입력)-실패 변경 성공"
+                    });
+                }
+                else{ // 실패를 제외한 경우
+                    var successStatusCount = 0
+
+                    const patchChallengeCertificationInfoRows_4 = await challengecertificationDao.patchChallengeCertificationInfo_4(patchChallengeCertificationInfoParams); // 챌린지 인증 상태 변경
+                    const getChallengeCertification_4InfoRows = await challengecertificationDao.getChallengeCertification_4Info(challengeIdx); // 챌린지 조회 
+                    
+                    for(var i = 0; i<getChallengeCertification_4InfoRows[0].length; i++){
+                        // console.log(getChallengeCertification_4InfoRows[0][i]);
+                        // console.log(getChallengeCertification_4InfoRows[0][i].challengeCertificationStatus);
+
+                        if(getChallengeCertification_4InfoRows[0][i].challengeCertificationStatus == '1'){
+                            successStatusCount++;
+                        }
+                        
+                    }
+                    // console.log("성공 갯수" + successStatusCount);
+                    // console.log("길이" + getChallengeCertification_4InfoRows[0].length);
+                    
+                    // 모두 성공일 경우 - 즉시 전환
+                    if(successStatusCount == getChallengeCertification_4InfoRows[0].length){
+                        const patchChallengeIntermediateCertificationInfoRows = await challengecertificationDao.patchChallengeIntermediateCertificationSuccessInfo_4(challengeIdx); // 챌린지 중간 상태 성공 전환
+                        successStatusCount = 0; // 초기화
+                        console.log("챌린지 중간 상태 성공(모두 성공) 전환!");
+                    }
+
+                    return res.json({
+                        isSuccess: true,
+                        code: 1000,
+                        message: "챌린지 중간 상태(사용자입력) 변경 성공"
+                    });
+                }
+            }
+            else if(timeNumber == 8){
+                if(challengeCertificationStatus == '3'){ // 실패일 경우 
+                    const patchChallengeCertificationInfoRows_8 = await challengecertificationDao.patchChallengeCertificationInfo_8(patchChallengeCertificationInfoParams); // 챌린지 인증 상태 변경
+                    const patchChallengeFailInfoRows = await challengecertificationDao.patchChallengeFailInfo(patchChallengeFailInfoParams); // 챌린지 실패 전환 - 즉시 실패 전환
+                    const patchChallengeIntermediateCertificationFailInfoRows_8 = await challengecertificationDao.patchChallengeIntermediateCertificationFailInfo_8(challengeIdx); // 챌린지 중간 인증 실패
+
+                    return res.json({
+                        isSuccess: true,
+                        code: 1000,
+                        message: "챌린지 중간 상태(사용자입력)-실패 변경 성공"
+                    });
+                }
+                else{ // 실패를 제외한 경우
+                    var successStatusCount = 0
+
+                    const patchChallengeCertificationInfoRows_8 = await challengecertificationDao.patchChallengeCertificationInfo_8(patchChallengeCertificationInfoParams); // 챌린지 인증 상태 변경
+                    const getChallengeCertification_8InfoRows = await challengecertificationDao.getChallengeCertification_8Info(challengeIdx); // 챌린지 조회 
+                    
+                    for(var i = 0; i<getChallengeCertification_8InfoRows[0].length; i++){
+                        // console.log(getChallengeCertification_8InfoRows[0][i]);
+                        // console.log(getChallengeCertification_8InfoRows[0][i].challengeCertificationStatus);
+
+                        if(getChallengeCertification_8InfoRows[0][i].challengeCertificationStatus == '1'){
+                            successStatusCount++;
+                        }
+                        
+                    }
+                    // console.log("성공 갯수" + successStatusCount);
+                    // console.log("길이" + getChallengeCertification_8InfoRows[0].length);
+                    
+                    // 모두 성공일 경우 - 즉시 전환
+                    if(successStatusCount == getChallengeCertification_8InfoRows[0].length){
+                        const patchChallengeIntermediateCertificationInfoRows = await challengecertificationDao.patchChallengeIntermediateCertificationSuccessInfo_8(challengeIdx); // 챌린지 중간 상태 성공 전환
+                        successStatusCount = 0; // 초기화
+                        console.log("챌린지 중간 상태 성공(모두 성공) 전환!");
+                    }
+
+                    return res.json({
+                        isSuccess: true,
+                        code: 1000,
+                        message: "챌린지 중간 상태(사용자입력) 변경 성공"
+                    });
+                }
+            }
+            else if(timeNumber == 12){
+                if(challengeCertificationStatus == '3'){ // 실패일 경우 
+                    const patchChallengeCertificationInfoRows_12 = await challengecertificationDao.patchChallengeCertificationInfo_12(patchChallengeCertificationInfoParams); // 챌린지 인증 상태 변경
+                    const patchChallengeFailInfoRows = await challengecertificationDao.patchChallengeFailInfo(patchChallengeFailInfoParams); // 챌린지 실패 전환 - 즉시 실패 전환
+                    const patchChallengeIntermediateCertificationFailInfoRows_12 = await challengecertificationDao.patchChallengeIntermediateCertificationFailInfo_12(challengeIdx); // 챌린지 중간 인증 실패
+
+                    return res.json({
+                        isSuccess: true,
+                        code: 1000,
+                        message: "챌린지 중간 상태(사용자입력)-실패 변경 성공"
+                    });
+                }
+                else{ // 실패를 제외한 경우
+                    var successStatusCount = 0
+
+                    const patchChallengeCertificationInfoRows_12 = await challengecertificationDao.patchChallengeCertificationInfo_12(patchChallengeCertificationInfoParams); // 챌린지 인증 상태 변경
+                    const getChallengeCertification_12InfoRows = await challengecertificationDao.getChallengeCertification_12Info(challengeIdx); // 챌린지 조회 
+                    
+                    for(var i = 0; i<getChallengeCertification_12InfoRows[0].length; i++){
+                        // console.log(getChallengeCertification_12InfoRows[0][i]);
+                        // console.log(getChallengeCertification_12InfoRows[0][i].challengeCertificationStatus);
+
+                        if(getChallengeCertification_12InfoRows[0][i].challengeCertificationStatus == '1'){
+                            successStatusCount++;
+                        }
+                        
+                    }
+                    // console.log("성공 갯수" + successStatusCount);
+                    // console.log("길이" + getChallengeCertification_12InfoRows[0].length);
+                    
+                    // 모두 성공일 경우 - 즉시 전환
+                    if(successStatusCount == getChallengeCertification_12InfoRows[0].length){
+                        const patchChallengeIntermediateCertificationInfoRows = await challengecertificationDao.patchChallengeIntermediateCertificationSuccessInfo_12(challengeIdx); // 챌린지 중간 상태 성공 전환
+                        successStatusCount = 0; // 초기화
+                        console.log("챌린지 중간 상태 성공(모두 성공) 전환!");
+                    }
+
+                    return res.json({
+                        isSuccess: true,
+                        code: 1000,
+                        message: "챌린지 중간 상태(사용자입력) 변경 성공"
+                    });
+                }
+            }
+            else if(timeNumber == 16){
+                if(challengeCertificationStatus == '3'){ // 실패일 경우 
+                    const patchChallengeCertificationInfoRows_16 = await challengecertificationDao.patchChallengeCertificationInfo_16(patchChallengeCertificationInfoParams); // 챌린지 인증 상태 변경
+                    const patchChallengeFailInfoRows = await challengecertificationDao.patchChallengeFailInfo(patchChallengeFailInfoParams); // 챌린지 실패 전환 - 즉시 실패 전환
+                    const patchChallengeIntermediateCertificationFailInfoRows_16 = await challengecertificationDao.patchChallengeIntermediateCertificationFailInfo_16(challengeIdx); // 챌린지 중간 인증 실패
+
+                    return res.json({
+                        isSuccess: true,
+                        code: 1000,
+                        message: "챌린지 중간 상태(사용자입력)-실패 변경 성공"
+                    });
+                }
+                else{ // 실패를 제외한 경우
+                    var successStatusCount = 0
+
+                    const patchChallengeCertificationInfoRows_16 = await challengecertificationDao.patchChallengeCertificationInfo_16(patchChallengeCertificationInfoParams); // 챌린지 인증 상태 변경
+                    const getChallengeCertification_16InfoRows = await challengecertificationDao.getChallengeCertification_16Info(challengeIdx); // 챌린지 조회 
+                    
+                    for(var i = 0; i<getChallengeCertification_16InfoRows[0].length; i++){
+                        // console.log(getChallengeCertification_16InfoRows[0][i]);
+                        // console.log(getChallengeCertification_16InfoRows[0][i].challengeCertificationStatus);
+
+                        if(getChallengeCertification_16InfoRows[0][i].challengeCertificationStatus == '1'){
+                            successStatusCount++;
+                        }
+                        
+                    }
+                    // console.log("성공 갯수" + successStatusCount);
+                    // console.log("길이" + getChallengeCertification_16InfoRows[0].length);
+                    
+                    // 모두 성공일 경우 - 즉시 전환
+                    if(successStatusCount == getChallengeCertification_16InfoRows[0].length){
+                        const patchChallengeIntermediateCertificationInfoRows = await challengecertificationDao.patchChallengeIntermediateCertificationSuccessInfo_16(challengeIdx); // 챌린지 중간 상태 성공 전환
+                        successStatusCount = 0; // 초기화
+                        console.log("챌린지 중간 상태 성공(모두 성공) 전환!");
+                    }
+
+                    return res.json({
+                        isSuccess: true,
+                        code: 1000,
+                        message: "챌린지 중간 상태(사용자입력) 변경 성공"
+                    });
+                }
+            }
+            else if(timeNumber == 20){
+                if(challengeCertificationStatus == '3'){ // 실패일 경우 
+                    const patchChallengeCertificationInfoRows_20 = await challengecertificationDao.patchChallengeCertificationInfo_20(patchChallengeCertificationInfoParams); // 챌린지 인증 상태 변경
+                    const patchChallengeFailInfoRows = await challengecertificationDao.patchChallengeFailInfo(patchChallengeFailInfoParams); // 챌린지 실패 전환 - 즉시 실패 전환
+                    const patchChallengeIntermediateCertificationFailInfoRows_20 = await challengecertificationDao.patchChallengeIntermediateCertificationFailInfo_20(challengeIdx); // 챌린지 중간 인증 실패
+
+                    return res.json({
+                        isSuccess: true,
+                        code: 1000,
+                        message: "챌린지 중간 상태(사용자입력)-실패 변경 성공"
+                    });
+                }
+                else{ // 실패를 제외한 경우
+                    var successStatusCount = 0
+
+                    const patchChallengeCertificationInfoRows_20 = await challengecertificationDao.patchChallengeCertificationInfo_20(patchChallengeCertificationInfoParams); // 챌린지 인증 상태 변경
+                    const getChallengeCertification_20InfoRows = await challengecertificationDao.getChallengeCertification_20Info(challengeIdx); // 챌린지 조회 
+                    
+                    for(var i = 0; i<getChallengeCertification_20InfoRows[0].length; i++){
+                        // console.log(getChallengeCertification_20InfoRows[0][i]);
+                        // console.log(getChallengeCertification_20InfoRows[0][i].challengeCertificationStatus);
+
+                        if(getChallengeCertification_20InfoRows[0][i].challengeCertificationStatus == '1'){
+                            successStatusCount++;
+                        }
+                        
+                    }
+                    // console.log("성공 갯수" + successStatusCount);
+                    // console.log("길이" + getChallengeCertification_20InfoRows[0].length);
+                    
+                    // 모두 성공일 경우 - 즉시 전환
+                    if(successStatusCount == getChallengeCertification_20InfoRows[0].length){
+                        const patchChallengeIntermediateCertificationInfoRows = await challengecertificationDao.patchChallengeIntermediateCertificationSuccessInfo_20(challengeIdx); // 챌린지 중간 상태 성공 전환
+                        successStatusCount = 0; // 초기화
+                        console.log("챌린지 중간 상태 성공(모두 성공) 전환!");
+                    }
+
+                    return res.json({
+                        isSuccess: true,
+                        code: 1000,
+                        message: "챌린지 중간 상태(사용자입력) 변경 성공"
+                    });
+                }
             }
 
             await connection.commit();
-            return res.json({
-                isSuccess: true,
-                code: 1000,
-                message: "챌린지 중간 상태 성공 전환",
-                challengeCertificationList: getChallengeCertification_0InfoRows[0],
-            });
+            
         } catch (err) {
             await connection.rollback(); // ROLLBACK
            // connection.release();
-            logger.error(`App - 인증목록 0시~4시 조회 Query error\n: ${err.message}`);
+            logger.error(`App -챌린지 중간 상태(사용자입력) 변경 성공 Query error\n: ${err.message}`);
             return res.status(4000).send(`Error: ${err.message}`);
         } finally {
             connection.release();

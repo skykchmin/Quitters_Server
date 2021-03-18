@@ -153,9 +153,24 @@ async function getChallengeObserverInfo(challengeIdx) {
   return getChallengeObserverInfoRows;
 }
 
-
-
-
+// 챌린지 실패 메시지 조회
+async function getChallengeFailMessageInfo(getChallengeFailMessageInfoParams) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const getChallengeFailMessageInfoQuery = `
+  select challengeDeclarer, u.userNickName, challengeFailText
+  from challenge
+  inner join challengecertification c on challenge.challengeIdx = c.challengeIdx
+  inner join user u on c.observerIdx = u.userIdx
+  where c.challengeIdx = ? and c.observerIdx = ? and c.challengeCertificationStatus = '3';
+  `;
+  
+  const [getChallengeFailMessageInfoRows] = await connection.query(
+    getChallengeFailMessageInfoQuery,
+    getChallengeFailMessageInfoParams
+  );
+  connection.release();
+  return getChallengeFailMessageInfoRows;
+}
 
 module.exports = {
     insertChallengeInfo,
@@ -167,5 +182,5 @@ module.exports = {
     getFriendsChallengeInfo,
     getChallengeDetailInfo,
     getChallengeObserverInfo,
-    
+    getChallengeFailMessageInfo
 };

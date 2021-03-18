@@ -192,3 +192,30 @@ exports.getChallengeDetail = async function (req, res) {
         }
       
 };
+
+// 챌린지 실패메시지 - 알림
+exports.getChallengeFailMessage = async function (req, res) {
+    // const { id } = req.verifiedToken;
+
+    const challengeIdx = req.params.challengeIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
+    const observerIdx = req.params.observerIdx;
+
+        try {
+            
+            const getChallengeFailMessageParams = [challengeIdx, observerIdx];
+            const getChallengeFailMessageInfoRows = await challengeDao.getChallengeFailMessageInfo(getChallengeFailMessageParams); // 나의 챌린지 조회
+            
+            return res.json({
+                isSuccess: true,
+                code: 1000,
+                message: "실패 메시지 조회 성공",
+                failContent: getChallengeFailMessageInfoRows[0],
+                
+            });
+        } catch (err) {
+           // await connection.rollback(); // ROLLBACK
+           // connection.release();
+            logger.error(`App - "실패 메시지 조회 Query error\n: ${err.message}`);
+            return res.status(4000).send(`Error: ${err.message}`);
+        }
+};

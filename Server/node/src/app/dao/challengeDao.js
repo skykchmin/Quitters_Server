@@ -172,6 +172,48 @@ async function getChallengeFailMessageInfo(getChallengeFailMessageInfoParams) {
   return getChallengeFailMessageInfoRows;
 }
 
+// 챌린지 목록 관리 - 나의 챌린지
+async function getMyChallengeListInfo(userIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const getMyChallengeListInfoQuery = `
+  select challengeDeclarer, challengeStartDate, challengeEndDate, challengeText, challengeStatus
+  from challenge
+  where userIdx = ? and not challengeStatus = '3'
+  order by field(challengeStatus, '0', '1', '2');
+  `;
+  
+  const getMyChallengeListInfoParams = [userIdx]
+  const getMyChallengeListInfoRows = await connection.query(
+    getMyChallengeListInfoQuery,
+    getMyChallengeListInfoParams
+  );
+  connection.release();
+  return getMyChallengeListInfoRows;
+}
+
+// 
+
+async function getFriendChallengeListInfo(observerIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const getFriendChallengeListInfoQuery = `
+  select challengeDeclarer, challengeStartDate, challengeEndDate, challengeText, challengeStatus
+  from challenge
+  inner join declarerobserver d on challenge.challengeIdx = d.challengeIdx
+  where observerIdx = ? and observerStatus = 'F'
+  order by field(challengeStatus, '0', '1', '2');
+  `;
+  
+  const getFriendChallengeListInfoParams = [observerIdx]
+  const getFriendChallengeListInfoRows = await connection.query(
+    getFriendChallengeListInfoQuery,
+    getFriendChallengeListInfoParams
+  );
+  connection.release();
+  return getFriendChallengeListInfoRows;
+}
+
+
+
 module.exports = {
     insertChallengeInfo,
     challengeCodeCheck,
@@ -182,5 +224,7 @@ module.exports = {
     getFriendsChallengeInfo,
     getChallengeDetailInfo,
     getChallengeObserverInfo,
-    getChallengeFailMessageInfo
+    getChallengeFailMessageInfo,
+    getMyChallengeListInfo,
+    getFriendChallengeListInfo
 };

@@ -7,9 +7,9 @@ module.exports = function(app){
 
     cron.schedule('0 0-23/4 1-31 * *', certificationscheduler.updateIntermediateCertification); // 챌린지 중간 인증 추가
 
+    cron.schedule('0 0-23/4 1-31 * *', certificationscheduler.patchAutoChallengeIntermediateCertification); // 챌린지 중간 인증 자동 전환
     // cron.schedule('0-59/1 * 1-31 * *', certificationscheduler.patchAutoChallengeIntermediateCertification); //
-    app.get('/challenges/intermediate/test', certificationscheduler.patchAutoChallengeIntermediateCertification); //
-
+    // app.get('/challenges/intermediate/test', certificationscheduler.patchAutoChallengeIntermediateCertification); // 중간인증 자동 전환 테스트
     // cron.schedule('0-59/1 * 1-31 * *', certificationscheduler.updateChallengeParticipation); // 테스트용
     // app.get('/check', jwtMiddleware, user.check);
 };

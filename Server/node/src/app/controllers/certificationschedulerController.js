@@ -172,41 +172,175 @@ exports.updateIntermediateCertification = async function (req, res) {
 exports.patchAutoChallengeIntermediateCertification = async function (req, res) {
     // const { id } = req.verifiedToken;
 
-    // const timeNumber = req.params.timeNumber; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
+    var date = new Date();
+    var hours = date.getHours();
+
+
     const connection = await pool.getConnection(); // 트랜잭션 정의
-    var excludingFailureStatusCount = 0; // 실패를 제외한 횟수 
     
+    if(hours >= 0 && hours <= 4){
         try {
-            temp = [];
+            
             await connection.beginTransaction(); // 트랜잭션 시작
 
             const getChallengeStatusInfoRows = await certificationschedulerDao.getChallengeStatusInfo(); // 챌린지 진행여부 조회 
 
-            for(var i = 0; i < getChallengeStatusInfoRows[0].length; i++){
-                
+            for(var i = 0; i < getChallengeStatusInfoRows[0].length; i++){    
                 var patchAutoChallengeIntermediateCertificationChallengeIdx = getChallengeStatusInfoRows[0][i].challengeIdx; // 챌린지 번호 뽑아오기
-                console.log(patchAutoChallengeIntermediateCertificationChallengeIdx);
-                // const patchAutoChallengeIntermediateCertificationInfoParams = [patchAutoChallengeIntermediateCertificationChallengeIdx];
-                // const patchAutoChallengeIntermediateCertificationInfoRows = await certificationschedulerDao.patchAutoChallengeIntermediateCertificationInfo(patchAutoChallengeIntermediateCertificationInfoParams);
+                // console.log(patchAutoChallengeIntermediateCertificationChallengeIdx);
+                const patchAutoChallengeIntermediateCertificationInfoParams = [patchAutoChallengeIntermediateCertificationChallengeIdx];
+                const patchAutoChallengeIntermediateCertificationInfoRows = await challengecertificationDao.patchChallengeIntermediateCertificationSuccessInfo_0(patchAutoChallengeIntermediateCertificationInfoParams);
             }
             
             await connection.commit();
-            console.log("챌린지 중간 인증 상태 성공 전환!");
-            // return true;
-            return res.json({
-                isSuccess: true,
-                code: 1000,
-                message: "챌린지 중간 상태 성공 전환",
-                // challengeCertificationList: getChallengeCertification_0InfoRows[0],
-            });
+            console.log("챌린지 중간 인증 상태 0시 ~ 4시 성공 전환!");
+            return true;
+           
         } catch (err) {
             await connection.rollback(); // ROLLBACK
            // connection.release();
-            logger.error(`App - 챌린지 중간 상태 성공 전환 Query error\n: ${err.message}`);
+            logger.error(`App - 챌린지 중간 인증 상태 0시 ~ 4시 성공 전환 Query error\n: ${err.message}`);
             return res.status(4000).send(`Error: ${err.message}`);
         } finally {
             connection.release();
         }
+    }
+    else if(hours >= 4 && hours <= 8){
+        try {
+            
+            await connection.beginTransaction(); // 트랜잭션 시작
+
+            const getChallengeStatusInfoRows = await certificationschedulerDao.getChallengeStatusInfo(); // 챌린지 진행여부 조회 
+
+            for(var i = 0; i < getChallengeStatusInfoRows[0].length; i++){    
+                var patchAutoChallengeIntermediateCertificationChallengeIdx = getChallengeStatusInfoRows[0][i].challengeIdx; // 챌린지 번호 뽑아오기
+                // console.log(patchAutoChallengeIntermediateCertificationChallengeIdx);
+                const patchAutoChallengeIntermediateCertificationInfoParams = [patchAutoChallengeIntermediateCertificationChallengeIdx];
+                const patchAutoChallengeIntermediateCertificationInfoRows = await challengecertificationDao.patchChallengeIntermediateCertificationSuccessInfo_4(patchAutoChallengeIntermediateCertificationInfoParams);
+            }
+            
+            await connection.commit();
+            console.log("챌린지 중간 인증 상태 4시 ~ 8시 성공 전환!");
+            return true;
+            
+        } catch (err) {
+            await connection.rollback(); // ROLLBACK
+           // connection.release();
+            logger.error(`App - 챌린지 중간 상태 4시 ~ 8시 성공 전환 Query error\n: ${err.message}`);
+            return res.status(4000).send(`Error: ${err.message}`);
+        } finally {
+            connection.release();
+        }
+    }
+    else if(hours >= 8 && hours <= 12){
+        try {
+            
+            await connection.beginTransaction(); // 트랜잭션 시작
+
+            const getChallengeStatusInfoRows = await certificationschedulerDao.getChallengeStatusInfo(); // 챌린지 진행여부 조회 
+
+            for(var i = 0; i < getChallengeStatusInfoRows[0].length; i++){    
+                var patchAutoChallengeIntermediateCertificationChallengeIdx = getChallengeStatusInfoRows[0][i].challengeIdx; // 챌린지 번호 뽑아오기
+                // console.log(patchAutoChallengeIntermediateCertificationChallengeIdx);
+                const patchAutoChallengeIntermediateCertificationInfoParams = [patchAutoChallengeIntermediateCertificationChallengeIdx];
+                const patchAutoChallengeIntermediateCertificationInfoRows = await challengecertificationDao.patchChallengeIntermediateCertificationSuccessInfo_8(patchAutoChallengeIntermediateCertificationInfoParams);
+            }
+            
+            await connection.commit();
+            console.log("챌린지 중간 인증 상태 8시 ~ 12시 성공 전환!");
+            return true;
+            
+        } catch (err) {
+            await connection.rollback(); // ROLLBACK
+           // connection.release();
+            logger.error(`App - 챌린지 중간 상태 8시 ~ 12시 성공 전환 Query error\n: ${err.message}`);
+            return res.status(4000).send(`Error: ${err.message}`);
+        } finally {
+            connection.release();
+        }
+    }
+    else if(hours >= 12 && hours <= 16){
+        try {
+            
+            await connection.beginTransaction(); // 트랜잭션 시작
+
+            const getChallengeStatusInfoRows = await certificationschedulerDao.getChallengeStatusInfo(); // 챌린지 진행여부 조회 
+
+            for(var i = 0; i < getChallengeStatusInfoRows[0].length; i++){    
+                var patchAutoChallengeIntermediateCertificationChallengeIdx = getChallengeStatusInfoRows[0][i].challengeIdx; // 챌린지 번호 뽑아오기
+                // console.log(patchAutoChallengeIntermediateCertificationChallengeIdx);
+                const patchAutoChallengeIntermediateCertificationInfoParams = [patchAutoChallengeIntermediateCertificationChallengeIdx];
+                const patchAutoChallengeIntermediateCertificationInfoRows = await challengecertificationDao.patchChallengeIntermediateCertificationSuccessInfo_12(patchAutoChallengeIntermediateCertificationInfoParams);
+            }
+            
+            await connection.commit();
+            console.log("챌린지 중간 인증 상태 12시 ~ 16시 성공 전환!");
+            return true;
+            
+        } catch (err) {
+            await connection.rollback(); // ROLLBACK
+           // connection.release();
+            logger.error(`App - 챌린지 중간 상태 12시 ~ 16시 성공 전환 Query error\n: ${err.message}`);
+            return res.status(4000).send(`Error: ${err.message}`);
+        } finally {
+            connection.release();
+        }
+    }
+    else if(hours >= 16 && hours <= 20){
+        try {
+            
+            await connection.beginTransaction(); // 트랜잭션 시작
+
+            const getChallengeStatusInfoRows = await certificationschedulerDao.getChallengeStatusInfo(); // 챌린지 진행여부 조회 
+
+            for(var i = 0; i < getChallengeStatusInfoRows[0].length; i++){    
+                var patchAutoChallengeIntermediateCertificationChallengeIdx = getChallengeStatusInfoRows[0][i].challengeIdx; // 챌린지 번호 뽑아오기
+                // console.log(patchAutoChallengeIntermediateCertificationChallengeIdx);
+                const patchAutoChallengeIntermediateCertificationInfoParams = [patchAutoChallengeIntermediateCertificationChallengeIdx];
+                const patchAutoChallengeIntermediateCertificationInfoRows = await challengecertificationDao.patchChallengeIntermediateCertificationSuccessInfo_16(patchAutoChallengeIntermediateCertificationInfoParams);
+            }
+            
+            await connection.commit();
+            console.log("챌린지 중간 인증 상태 16시~20시 성공 전환!");
+            return true;
+            
+        } catch (err) {
+            await connection.rollback(); // ROLLBACK
+           // connection.release();
+            logger.error(`App - 챌린지 중간 상태 16시~20시 성공 전환 Query error\n: ${err.message}`);
+            return res.status(4000).send(`Error: ${err.message}`);
+        } finally {
+            connection.release();
+        }
+    }
+    else if(hours >= 20 && hours <= 24){
+        try {
+            
+            await connection.beginTransaction(); // 트랜잭션 시작
+
+            const getChallengeStatusInfoRows = await certificationschedulerDao.getChallengeStatusInfo(); // 챌린지 진행여부 조회 
+
+            for(var i = 0; i < getChallengeStatusInfoRows[0].length; i++){    
+                var patchAutoChallengeIntermediateCertificationChallengeIdx = getChallengeStatusInfoRows[0][i].challengeIdx; // 챌린지 번호 뽑아오기
+                // console.log(patchAutoChallengeIntermediateCertificationChallengeIdx);
+                const patchAutoChallengeIntermediateCertificationInfoParams = [patchAutoChallengeIntermediateCertificationChallengeIdx];
+                const patchAutoChallengeIntermediateCertificationInfoRows = await challengecertificationDao.patchChallengeIntermediateCertificationSuccessInfo_20(patchAutoChallengeIntermediateCertificationInfoParams);
+                
+            }
+            
+            await connection.commit();
+            console.log("챌린지 중간 인증 상태 20시~24시 성공 전환!");
+            return true;
+            
+        } catch (err) {
+            await connection.rollback(); // ROLLBACK
+           // connection.release();
+            logger.error(`App - 챌린지 중간 상태 20시~24시 성공 전환 Query error\n: ${err.message}`);
+            return res.status(4000).send(`Error: ${err.message}`);
+        } finally {
+            connection.release();
+        }
+    }
       
 };
 

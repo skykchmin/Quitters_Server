@@ -7,5 +7,6 @@ module.exports = function(app){
     app.patch('/challenges/:challengeIdx', challenge.deleteChallenge); // 챌린지 삭제
     app.get('/main/:userIdx', challenge.getMain);
     app.get('/challenges/detail/:challengeIdx', challenge.getChallengeDetail); // 챌린지 상세 조회
+    app.get('/challenges/failmessage/:challengeIdx/:observerIdx', challenge.getChallengeFailMessage); // 챌린지 실패 사유 
     // app.get('/check', jwtMiddleware, user.check);
 };

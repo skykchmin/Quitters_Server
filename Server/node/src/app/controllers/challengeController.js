@@ -219,3 +219,57 @@ exports.getChallengeFailMessage = async function (req, res) {
             return res.status(4000).send(`Error: ${err.message}`);
         }
 };
+
+// 챌린지 목록 관리 - 나의 챌린지 
+exports.getMyChallengeListInfo = async function (req, res) {
+    // const { id } = req.verifiedToken;
+
+    const userIdx = req.params.userIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
+    
+    if (!userIdx) return res.json({isSuccess: false, code: 2100, message: "유저번호를 입력해주세요."});
+
+        try {
+            
+            const getMyChallengeListInfoRows = await challengeDao.getMyChallengeListInfo(userIdx); // 나의 챌린지 조회
+            
+            return res.json({
+                isSuccess: true,
+                code: 1000,
+                message: "챌린지 목록 관리 - 나의 챌린지 조회 성공!",
+                myChallengeList: getMyChallengeListInfoRows[0],
+                
+            });
+        } catch (err) {
+           // await connection.rollback(); // ROLLBACK
+           // connection.release();
+            logger.error(`App - "챌린지 목록 관리 - 나의 챌린지 조회 Query error\n: ${err.message}`);
+            return res.status(4000).send(`Error: ${err.message}`);
+        }
+};
+
+// 챌린지 목록 관리 - 친구의 챌린지
+exports.getFriendChallengeListInfo = async function (req, res) {
+    // const { id } = req.verifiedToken;
+
+    const observerIdx = req.params.observerIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
+    
+    if (!observerIdx) return res.json({isSuccess: false, code: 2100, message: "감시자 번호를 입력해주세요."});
+
+        try {
+            
+            const getFriendChallengeListInfoRows = await challengeDao.getFriendChallengeListInfo(observerIdx); // 나의 챌린지 조회
+            
+            return res.json({
+                isSuccess: true,
+                code: 1000,
+                message: "챌린지 목록 관리 - 친구의 챌린지 조회 성공!",
+                friendChallengeList: getFriendChallengeListInfoRows[0],
+                
+            });
+        } catch (err) {
+           // await connection.rollback(); // ROLLBACK
+           // connection.release();
+            logger.error(`App - "챌린지 목록 관리 - 친구의 챌린지 조회 Query error\n: ${err.message}`);
+            return res.status(4000).send(`Error: ${err.message}`);
+        }
+};

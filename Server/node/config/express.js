@@ -24,6 +24,8 @@ module.exports = function () {
     require('../src/app/routes/challengecertificationRoute')(app);
     require('../src/app/routes/certificationschedulerRoute')(app);
     require('../src/app/routes/socialRoute')(app);
+    require('../src/app/routes/pushRoute')(app);
+    require('../src/app/routes/pushSchedulerRoute')(app);
 
     /* Web */
     // require('../src/web/routes/indexRoute')(app);

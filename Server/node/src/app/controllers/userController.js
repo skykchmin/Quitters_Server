@@ -140,8 +140,11 @@ exports.signUp = async function (req, res) {
                 message: "회원가입 성공"
             });
         } catch (err) { // 에러가 발생했다면 에러를 알려줍니다. 
-            logger.error(`App - SignUp Query error\n: ${err.message}`);
-            return res.status(500).send(`Error: ${err.message}`);
+            return res.json({
+                isSuccess: false,
+                code: 2000,
+                message: "회원가입 실패!",
+            });
         }
 };
 
@@ -233,8 +236,11 @@ exports.signIn = async function (req, res) {
             });
 
         } catch (err) {
-            logger.error(`App - SignIn Query error\n: ${JSON.stringify(err)}`);
-            return false;
+            return res.json({
+                isSuccess: false,
+                code: 2000,
+                message: "로그인 실패!",
+            });
         }
 };
 
@@ -275,8 +281,11 @@ exports.changeProfile = async function (req, res) {
             });
 
         } catch (err) {
-            logger.error(`App - change UserInfo Query error\n: ${JSON.stringify(err)}`);
-            return false;
+            return res.json({
+                isSuccess: false,
+                code: 2000,
+                message: "프로필 정보 수정 실패!",
+            });
         }
 };
 
@@ -339,8 +348,11 @@ exports.changeId = async function (req, res) {
             });
 
         } catch (err) {
-            logger.error(`App - change User ID Query error\n: ${JSON.stringify(err)}`);
-            return false;
+            return res.json({
+                isSuccess: false,
+                code: 2000,
+                message: "아이디 변경 실패!",
+            });
         }
 };
 
@@ -411,8 +423,11 @@ exports.changePasswordInfo = async function (req, res) {
             });
 
         } catch (err) {
-            logger.error(`App - change User password Query error\n: ${JSON.stringify(err)}`);
-            return false;
+            return res.json({
+                isSuccess: false,
+                code: 2000,
+                message: "비밀번호 변경 실패!",
+            });
         }
 };
 
@@ -434,8 +449,11 @@ exports.changePasswordInfo = async function (req, res) {
             });
 
         } catch (err) {
-            logger.error(`App - delete UserInfo Query error\n: ${JSON.stringify(err)}`);
-            return false;
+            return res.json({
+                isSuccess: false,
+                code: 2000,
+                message: "회원 탈퇴 실패!",
+            });
         }
 };
 
@@ -458,8 +476,11 @@ exports.changePasswordInfo = async function (req, res) {
             });
 
         } catch (err) {
-            logger.error(`App - delete UserInfo Query error\n: ${JSON.stringify(err)}`);
-            return false;
+            return res.json({
+                isSuccess: false,
+                code: 2000,
+                message: "회원 정보 조회 실패!",
+            });
         }
 };
 

@@ -39,6 +39,13 @@ exports.getKakao = async function (req, res) {
            
         
            try {
+
+            if(!admin.apps.length){
+                admin.initializeApp({
+                    credential: admin.credential.applicationDefault()
+                  });
+            }
+
                const nickName = temp.properties.nickname;
                const email = temp.kakao_account.email;
                const profileUrl = temp.properties.profile_image;
@@ -46,7 +53,43 @@ exports.getKakao = async function (req, res) {
                const userRows = await socialDao.userCheck(email);
     
                if (!(userRows.length > 0)) {
-    
+                   let uid,userCustomToken;
+                   await admin
+                       .auth()
+                       .createUser({
+                           email: email,
+                           emailVerified: false,
+                           password: 'quitters',
+                           displayName: nickName,
+                           photoURL: profileUrl,
+                           disabled: false,
+                       })
+                       .then((userRecord) => {
+                           // See the UserRecord reference doc for the contents of userRecord.
+                           console.log('Successfully created new user:', userRecord.uid);
+                           uid =userRecord.uid;
+                       })
+                       .catch((error) => {
+                        return res.json({
+                            isSuccess: false,
+                            code: 2233,
+                            message: "카카오 로그인 파이어베이스 연동 실패",
+                        });
+                       });
+
+                   await admin
+                       .auth()
+                       .createCustomToken(uid)
+                       .then((customToken) => {
+                           userCustomToken = customToken;
+                       })
+                       .catch((error) => {
+                        return res.json({
+                            isSuccess: false,
+                            code: 2232,
+                            message: "카카오 로그인 커스텀 토큰 생성 실패",
+                        });
+                       });
                 const hashedPassword = await crypto.createHash('sha512').update('quitters').digest('hex');
                 const insertUserRows = await socialDao.insertUserInfo(nickName,email,profileUrl,1,hashedPassword);
     
@@ -67,6 +110,7 @@ exports.getKakao = async function (req, res) {
                     jwt: token,
                     newUser : true,
                     userIdx : userInfoRows[0].userIdx,
+                    customToken : userCustomToken,
                     isSuccess: true,
                     code: 1000,
                     message: "신규 회원 카카오 로그인 성공"
@@ -74,6 +118,40 @@ exports.getKakao = async function (req, res) {
                 }
     
                 else{
+                    let uid,userCustomToken;
+                    if(!admin.apps.length){
+                        admin.initializeApp({
+                            credential: admin.credential.applicationDefault()
+                          });
+                    }
+
+                 await  admin
+                       .auth()
+                       .getUserByEmail(email)
+                       .then((userRecord) => {
+                           uid = userRecord.uid;
+                       })
+                       .catch((error) => {
+                        return res.json({
+                            isSuccess: false,
+                            code: 2231,
+                            message: "카카오 로그인 파이어베이스 유저 검색 실패",
+                        });
+                       });
+
+                       await admin
+                       .auth()
+                       .createCustomToken(uid)
+                       .then((customToken) => {
+                           userCustomToken = customToken;
+                       })
+                       .catch((error) => {
+                        return res.json({
+                            isSuccess: false,
+                            code: 2232,
+                            message: "카카오 로그인 커스텀 토큰 생성 실패",
+                        });
+                       });
     
                     const [userInfoRows] = await socialDao.selectUserInfo(email);
     
@@ -112,6 +190,7 @@ exports.getKakao = async function (req, res) {
                     jwt: token,
                     newUser : false,
                     userIdx : userInfoRows[0].userIdx,
+                    customToken : userCustomToken,
                     isSuccess: true,
                     code: 1000,
                     message: "기존 회원 카카오 로그인 성공"

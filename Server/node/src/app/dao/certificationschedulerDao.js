@@ -83,28 +83,22 @@ async function patchAutoChallengeIntermediateCertificationInfo(patchAutoChalleng
   return patchAutoChallengeIntermediateCertificationInfoRows;
 }
 
-// 0시 ~ 4시 인증 목록
-async function getChallengeCertification_0Info(getChallengeCertification_0InfoParams) {
+// 챌린지 종료날짜에 따른 성공 전환 
+async function updateChallengeSuccessInfo(updateChallengeSuccessInfoParams) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const getChallengeCertification_0InfoQuery = `
-  select userProfilePicture, userNickName, c.challengeCertificationTime, c.challengeCertificationStatus, challenge.challengeIdx
-from declarerobserver
-inner join challengecertification c on declarerobserver.ObserverIdx = c.observerIdx
-inner join user on user.userIdx = declarerobserver.ObserverIdx
-inner join challenge on c.challengeIdx = challenge.challengeIdx
-where declarerobserver.ObserverStatus = 'F'
-    and c.createdAt between concat(curdate(), ' 00:00:00') and concat(curdate(), ' 03:59:59');
+  const updateChallengeSuccessInfoQuery = `
+  update challenge
+  set challengeStatus = '1'
+  where challengeEndDate = curdate() and challengeStatus = '0'
   `;
   
-  const [getChallengeCertification_0InfoRows] = await connection.query(
-    getChallengeCertification_0InfoQuery,
-    getChallengeCertification_0InfoParams
+  const updateChallengeSuccessInfoRows = await connection.query(
+    updateChallengeSuccessInfoQuery,
+    updateChallengeSuccessInfoParams
   );
   connection.release();
-  return getChallengeCertification_0InfoRows;
+  return updateChallengeSuccessInfoRows;
 }
-
-
 
 
 
@@ -134,5 +128,5 @@ where declarerobserver.ObserverStatus = 'F'
       getChallengeStatusInfo,
       updateChallengeIntermediateCertificationInfo,
       patchAutoChallengeIntermediateCertificationInfo,
-      getChallengeCertification_0Info
+      updateChallengeSuccessInfo
   };

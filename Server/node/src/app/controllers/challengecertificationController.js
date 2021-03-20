@@ -9,6 +9,22 @@ exports.getChallengeCertification = async function (req, res) {
     const timeNumber = req.params.timeNumber; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
     const connection = await pool.getConnection(); // 트랜잭션 시작
 
+    if(!challengeIdx){
+        return res.json({
+            isSuccess: false, 
+            code: 2660, 
+            message: "챌린지 번호를 입력해주세요"
+        });
+    }
+
+    if(!timeNumber){
+        return res.json({
+            isSuccess: false, 
+            code: 2661, 
+            message: "유효한 시간대 번호를 입력해주세요"
+        });
+    }
+
     if(timeNumber == 0){
         try {
             await connection.beginTransaction();
@@ -190,11 +206,37 @@ exports.patchChallengeCertification = async function (req, res) {
 
     var patchChallengeCertificationInfoParams = [challengeCertificationStatus, challengeIdx, observerIdx];
     var patchChallengeFailInfoParams = [challengeFailText, challengeIdx];
-    if (!challengeCertificationStatus) return res.json({isSuccess: false, code: 2101, message: "챌린지 인증 상태를 입력해주세요"});
+
+    if(!challengeIdx){
+        return res.json({
+            isSuccess: false, 
+            code: 2680, 
+            message: "챌린지 번호를 입력해주세요"
+        });
+    }
+
+    if(!observerIdx){
+        return res.json({
+            isSuccess: false, 
+            code: 2681, 
+            message: "감시자 번호를 입력해주세요"
+        });
+    }
+
+    if(!timeNumber){
+        return res.json({
+            isSuccess: false, 
+            code: 2682, 
+            message: "유효한 시간대 번호를 입력해주세요"
+        });
+    }
+    
+
+    if (!challengeCertificationStatus) return res.json({isSuccess: false, code: 2683, message: "챌린지 인증 상태를 입력해주세요"});
     if (challengeFailText.length > 60){
         return res.json({
             isSuccess: false,
-            code: 2102,
+            code: 2684,
             message: "실패사유는 60자리 미만으로 입력해주세요.",
           });
     }

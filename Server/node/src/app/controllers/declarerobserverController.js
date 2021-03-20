@@ -23,6 +23,22 @@ exports.insertChallengeParticipation = async function (req, res) {
     //     return res.json({isSuccess: false, code: 2501, message: "문자를 이용해주세요"});
     // }
     
+    if(!challengeIdx){
+        return res.json({
+            isSuccess: false, 
+            code: 2560, 
+            message: "챌린지 번호를 입력해주세요"
+        });
+    }
+
+    if(!observerIdx){
+        return res.json({
+            isSuccess: false, 
+            code: 2561, 
+            message: "감시자 번호를 입력해주세요"
+        });
+    }
+
         try {
             
 
@@ -31,7 +47,7 @@ exports.insertChallengeParticipation = async function (req, res) {
             if (challengeParticipationCheckNumberRows.length > 8){
                 return res.json({
                     isSuccess: false,
-                    code: 2600,
+                    code: 2562,
                     message: "감시자는 8명 이상 추가할 수 없습니다"
                 });
             }
@@ -45,7 +61,7 @@ exports.insertChallengeParticipation = async function (req, res) {
             if(challengeCode != challengeParticipationCodeRows[0].challengeCode){
                 return res.json({
                     isSuccess: false,
-                    code: 2601,
+                    code: 2563,
                     message: "챌린지 번호를 다시 입력해주세요"
                 });
             }
@@ -80,6 +96,23 @@ exports.patchChallengeParticipation = async function (req, res) {
     const challengeIdx = req.params.challengeIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
     const observerIdx = req.params.observerIdx; 
     
+    
+    if(!challengeIdx){
+        return res.json({
+            isSuccess: false, 
+            code: 2580, 
+            message: "챌린지 번호를 입력해주세요"
+        });
+    }
+
+    if(!observerIdx){
+        return res.json({
+            isSuccess: false, 
+            code: 2581, 
+            message: "감시자 번호를 입력해주세요"
+        });
+    }
+
         try {
             
             const patchDeclarerObserverInfoParams = [challengeIdx, observerIdx];
@@ -107,6 +140,22 @@ exports.patchChallengeStopParticipation = async function (req, res) {
     const challengeIdx = req.params.challengeIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
     const observerIdx = req.params.observerIdx; 
     
+    if(!challengeIdx){
+        return res.json({
+            isSuccess: false, 
+            code: 2600, 
+            message: "챌린지 번호를 입력해주세요"
+        });
+    }
+
+    if(!observerIdx){
+        return res.json({
+            isSuccess: false, 
+            code: 2601, 
+            message: "감시자 번호를 입력해주세요"
+        });
+    }
+
         try {
             
             const patchStopDeclarerObserverInfoParams = [challengeIdx, observerIdx];

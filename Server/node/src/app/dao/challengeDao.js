@@ -212,6 +212,23 @@ async function getFriendChallengeListInfo(observerIdx) {
   return getFriendChallengeListInfoRows;
 }
 
+// 챌린지 중복 확인
+async function challengeDuplicateCheckInfo(userIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const challengeDuplicateCheckInfoQuery = `
+  select userIdx, challengeIdx, challengeStatus
+  from challenge
+  where userIdx = ? and challengeStatus = 0;
+  `;
+  
+  const challengeDuplicateCheckInfoParams = [userIdx]
+  const challengeDuplicateCheckInfoRows = await connection.query(
+    challengeDuplicateCheckInfoQuery,
+    challengeDuplicateCheckInfoParams
+  );
+  connection.release();
+  return challengeDuplicateCheckInfoRows;
+}
 
 
 module.exports = {
@@ -226,5 +243,6 @@ module.exports = {
     getChallengeObserverInfo,
     getChallengeFailMessageInfo,
     getMyChallengeListInfo,
-    getFriendChallengeListInfo
+    getFriendChallengeListInfo,
+    challengeDuplicateCheckInfo
 };

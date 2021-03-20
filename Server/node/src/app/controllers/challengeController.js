@@ -18,12 +18,23 @@ function checkString(string) {
     } 
 }
 
+// DateFormat
+function getFormatDate(date){
+    var year = date.getFullYear();
+    var month = (1 + date.getMonth());
+    month = month >= 10 ? month : '0' + month; // 10이 넘지 않으면 앞에 0을 붙인다
+    var day = date.getDate();
+    day = day >= 10 ? day : '0' + day; // 10이 넘지 않으면 앞에 0을 붙인다
+    return year + '-' + month + '-' + day;
+}
 
 
 //챌린지생성
 exports.insertChallenge = async function (req, res) {
     // const { id } = req.verifiedToken;
    
+    const connection = await pool.getConnection(); // 트랜잭션 정의
+
     const {
         userIdx, challengeStartDate, challengeEndDate, smokingAmount, cigarattePrice, challengeDeclarer, challengeText, challengeCreateTime, challengeUpdateTime
     } = req.body
@@ -38,11 +49,97 @@ exports.insertChallenge = async function (req, res) {
         return text;
     }
     
-    if (checkString(challengeDeclarer) == false){
-        return res.json({isSuccess: false, code: 2501, message: "선언자는 한글, 영문만 이용해주세요"});
+    if(!userIdx){
+        return res.json({
+            isSuccess: false, 
+            code: 2500, 
+            message: "유저번호를 입력해주세요"
+        });
+    }
+
+    if(!challengeStartDate){
+        return res.json({
+            isSuccess: false, 
+            code: 2501, 
+            message: "시작일을 입력해주세요"
+        });
+    }
+
+    if(!challengeEndDate){
+        return res.json({
+            isSuccess: false, 
+            code: 2502, 
+            message: "종료일을 입력해주세요"
+        });
+    }
+
+    if(!smokingAmount || smokingAmount < 0){
+        return res.json({
+            isSuccess: false, 
+            code: 2503, 
+            message: "유효한 하루흡연량을 입력해주세요"
+        });
+    }
+
+    if(!cigarattePrice || cigarattePrice < 0){
+        return res.json({
+            isSuccess: false, 
+            code: 2504, 
+            message: "유효한 담배 한 갑의 가격을 입력해주세요"
+        });
+    }
+
+    if(!challengeDeclarer){
+        return res.json({
+            isSuccess: false, 
+            code: 2505, 
+            message: "선언자를 입력해주세요"
+        });
+    }
+
+    if(!challengeText){
+        return res.json({
+            isSuccess: false, 
+            code: 2506, 
+            message: "실패 공약을 입력해주세요"
+        });
     }
     
+    if (checkString(challengeDeclarer) == false){
+        return res.json({isSuccess: false, code: 2507, message: "선언자는 한글, 영문만 이용해주세요"});
+    }
+    
+    var date = getFormatDate(new Date()); // 오늘 날짜 지정
+
+    // 시작일이 오늘 날짜보다 과거일 경우
+    if (challengeStartDate < date){
+        return res.json({
+            isSuccess: false, 
+            code: 2508, 
+            message: "유효한 시작일을 선택해주세요"
+        });
+    } 
+
+    // 종료일이 오늘 날짜보다 과거일 경우
+    if (challengeEndDate < date){
+        return res.json({
+            isSuccess: false, 
+            code: 2509, 
+            message: "유효한 종료일을 선택해주세요"
+        });
+    }
+
+    // 시작일이 종료일 보다 빠를 경우 
+    if (challengeStartDate > challengeEndDate){
+        return res.json({
+            isSuccess: false, 
+            code: 2510, 
+            message: "시작일은 종료일보다 빠를 수 없습니다"
+        });
+    }
         try {
+            await connection.beginTransaction(); // 트랜잭션 시작
+
             var challengeCode = makeRandomChallengeCode()
             console.log(challengeCode)
             const challengeCodeRows = await challengeDao.challengeCodeCheck(challengeCode);
@@ -54,9 +151,21 @@ exports.insertChallenge = async function (req, res) {
                 return true;
             }
 
+            // 챌린지 1개 이상 
+            const challengeDuplicateCheckInfoRows = await challengeDao.challengeDuplicateCheckInfo(userIdx);
+            console.log(challengeDuplicateCheckInfoRows[0].length);
+            if(challengeDuplicateCheckInfoRows[0].length > 0){
+                return res.json({
+                    isSuccess: false, 
+                    code: 2511, 
+                    message: "나의 챌린지는 한 개 이상 등록할 수 없습니다"
+                });
+            }
+
             const insertChallengeInfoParams = [userIdx, challengeStartDate, challengeEndDate, smokingAmount, cigarattePrice, challengeDeclarer, challengeText, challengeCode, challengeCreateTime, challengeUpdateTime];
             const insertChallengeInfoRows = await challengeDao.insertChallengeInfo(insertChallengeInfoParams);
 
+            await connection.commit();
             return res.json({
                 isSuccess: true,
                 code: 1000,
@@ -69,6 +178,8 @@ exports.insertChallenge = async function (req, res) {
            // connection.release();
             logger.error(`App - 챌린지 생성 Query error\n: ${err.message}`);
             return res.status(4000).send(`Error: ${err.message}`);
+        } finally {
+            connection.release();
         }
 };
 
@@ -81,6 +192,86 @@ exports.patchChallenge = async function (req, res) {
 
     const challengeIdx = req.params.challengeIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
 
+    if(!challengeStartDate){
+        return res.json({
+            isSuccess: false, 
+            code: 2520, 
+            message: "시작일을 입력해주세요"
+        });
+    }
+
+    if(!challengeEndDate){
+        return res.json({
+            isSuccess: false, 
+            code: 2521, 
+            message: "종료일을 입력해주세요"
+        });
+    }
+
+    if(!smokingAmount || smokingAmount < 0){
+        return res.json({
+            isSuccess: false, 
+            code: 2522, 
+            message: "유효한 하루흡연량을 입력해주세요"
+        });
+    }
+
+    if(!cigarattePrice || cigarattePrice < 0){
+        return res.json({
+            isSuccess: false, 
+            code: 2523, 
+            message: "유효한 담배 한 갑의 가격을 입력해주세요"
+        });
+    }
+
+    if(!challengeDeclarer){
+        return res.json({
+            isSuccess: false, 
+            code: 2524, 
+            message: "선언자를 입력해주세요"
+        });
+    }
+
+    if(!challengeText){
+        return res.json({
+            isSuccess: false, 
+            code: 2525, 
+            message: "실패 공약을 입력해주세요"
+        });
+    }
+    
+    if (checkString(challengeDeclarer) == false){
+        return res.json({isSuccess: false, code: 2526, message: "선언자는 한글, 영문만 이용해주세요"});
+    }
+    
+    var date = getFormatDate(new Date()); // 오늘 날짜 지정
+
+    // 시작일이 오늘 날짜보다 과거일 경우
+    if (challengeStartDate < date){
+        return res.json({
+            isSuccess: false, 
+            code: 2527, 
+            message: "유효한 시작일을 선택해주세요"
+        });
+    } 
+
+    // 종료일이 오늘 날짜보다 과거일 경우
+    if (challengeEndDate < date){
+        return res.json({
+            isSuccess: false, 
+            code: 2528, 
+            message: "유효한 종료일을 선택해주세요"
+        });
+    }
+
+    // 시작일이 종료일 보다 빠를 경우 
+    if (challengeStartDate > challengeEndDate){
+        return res.json({
+            isSuccess: false, 
+            code: 2529, 
+            message: "시작일은 종료일보다 빠를 수 없습니다"
+        });
+    }
         try {
             
             const patchChallengeInfoParams = [challengeStartDate, challengeEndDate, smokingAmount, cigarattePrice, challengeDeclarer, challengeText, challengeIdx];
@@ -105,6 +296,14 @@ exports.deleteChallenge = async function (req, res) {
 
     const challengeIdx = req.params.challengeIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
 
+        if(!challengeIdx){
+            return res.json({
+                isSuccess: false, 
+                code: 2540, 
+                message: "챌린지 번호를 입력해주세요"
+            });
+        }
+
         try {
             
             // const deleteChallengeInfoParams = [challengeIdx];
@@ -127,14 +326,26 @@ exports.deleteChallenge = async function (req, res) {
 exports.getMain = async function (req, res) {
     // const { id } = req.verifiedToken;
 
-    const UserIdx = req.params.userIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
-    const ObserverIdx = req.params.userIdx;
+    const userIdx = req.params.userIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
+    const observerIdx = req.params.userIdx;
+
+    const connection = await pool.getConnection(); // 트랜잭션 정의
+
+    if(!userIdx){
+        return res.json({
+            isSuccess: false, 
+            code: 2620, 
+            message: "유저 번호를 입력해주세요"
+        });
+    }
 
         try {
-            
-            const getMyChallengeInfoRows = await challengeDao.getMyChallengeInfo(UserIdx); // 나의 챌린지 조회
-            const getFriendsChallengeInfoRows = await challengeDao.getFriendsChallengeInfo(ObserverIdx); // 친구의 챌린지 조회
+            await connection.beginTransaction(); // 트랜잭션 시작
 
+            const getMyChallengeInfoRows = await challengeDao.getMyChallengeInfo(userIdx); // 나의 챌린지 조회
+            const getFriendsChallengeInfoRows = await challengeDao.getFriendsChallengeInfo(observerIdx); // 친구의 챌린지 조회
+
+            await connection.commit();
             return res.json({
                 isSuccess: true,
                 code: 1000,
@@ -143,10 +354,12 @@ exports.getMain = async function (req, res) {
                 friendsChallenge: getFriendsChallengeInfoRows[0]
             });
         } catch (err) {
-           // await connection.rollback(); // ROLLBACK
+            await connection.rollback(); // ROLLBACK
            // connection.release();
             logger.error(`App - 메인 조회 Query error\n: ${err.message}`);
             return res.status(4000).send(`Error: ${err.message}`);
+        } finally {
+            connection.release();
         }
 };
 
@@ -156,6 +369,13 @@ exports.getChallengeDetail = async function (req, res) {
     const challengeIdx = req.params.challengeIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
     const connection = await pool.getConnection(); // 트랜잭션 정의
     
+    if(!challengeIdx){
+        return res.json({
+            isSuccess: false, 
+            code: 2640, 
+            message: "챌린지 번호를 입력해주세요"
+        });
+    }
         try {
             await connection.beginTransaction(); // 트랜잭션 시작
 
@@ -200,6 +420,22 @@ exports.getChallengeFailMessage = async function (req, res) {
     const challengeIdx = req.params.challengeIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
     const observerIdx = req.params.observerIdx;
 
+    if(!challengeIdx){
+        return res.json({
+            isSuccess: false, 
+            code: 2700, 
+            message: "챌린지 번호를 입력해주세요"
+        });
+    }
+
+    if(!observerIdx){
+        return res.json({
+            isSuccess: false, 
+            code: 2701, 
+            message: "감시자 번호를 입력해주세요"
+        });
+    }
+
         try {
             
             const getChallengeFailMessageParams = [challengeIdx, observerIdx];
@@ -226,7 +462,7 @@ exports.getMyChallengeListInfo = async function (req, res) {
 
     const userIdx = req.params.userIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
     
-    if (!userIdx) return res.json({isSuccess: false, code: 2100, message: "유저번호를 입력해주세요."});
+    if (!userIdx) return res.json({isSuccess: false, code: 2720, message: "유저번호를 입력해주세요."});
 
         try {
             
@@ -253,7 +489,7 @@ exports.getFriendChallengeListInfo = async function (req, res) {
 
     const observerIdx = req.params.observerIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
     
-    if (!observerIdx) return res.json({isSuccess: false, code: 2100, message: "감시자 번호를 입력해주세요."});
+    if (!observerIdx) return res.json({isSuccess: false, code: 2740, message: "감시자 번호를 입력해주세요."});
 
         try {
             

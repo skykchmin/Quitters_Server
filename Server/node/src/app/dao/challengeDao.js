@@ -88,9 +88,10 @@ async function challengeParticipationCodeCheck(challengeIdx) {
 async function getMyChallengeInfo(userIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getMyChallengeInfoInfoQuery = `
-  select challengeIdx, challengeDeclarer, challengeStartDate, challengeEndDate, challengeText 
+  select challengeIdx, challengeDeclarer, u.userProfilePicture ,challengeStartDate, challengeEndDate, challengeText, challengeCreateTime
   from challenge
-  where userIdx = ?;
+  inner join user u on challenge.userIdx = u.userIdx
+  where challenge.userIdx = ?;
   `;
   const getMyChallengeInfoInfoParams = [userIdx]
   const getMyChallengeInfoInfoRows = await connection.query(
@@ -101,12 +102,14 @@ async function getMyChallengeInfo(userIdx) {
   return getMyChallengeInfoInfoRows;
 }
 
+// 친구의 챌린지
 async function getFriendsChallengeInfo(observerIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getFriendsChallengeInfoInfoQuery = `
-  select challenge.challengeIdx, challengeDeclarer, challengeStartDate, challengeEndDate, challengeText, challengeStatus
+  select challenge.challengeIdx, challengeDeclarer, u.userProfilePicture, challengeStartDate, challengeEndDate, challengeText, challengeStatus
   from challenge
   inner join declarerobserver d on challenge.challengeIdx = d.challengeIdx
+  inner join user u on ObserverIdx = u.userIdx
   where ObserverIdx = ?;
   `;
   const getFriendsChallengeInfoInfoParams = [observerIdx]
@@ -176,9 +179,10 @@ async function getChallengeFailMessageInfo(getChallengeFailMessageInfoParams) {
 async function getMyChallengeListInfo(userIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getMyChallengeListInfoQuery = `
-  select challengeDeclarer, challengeStartDate, challengeEndDate, challengeText, challengeStatus
+  select challengeDeclarer, u.userProfilePicture, challengeStartDate, challengeEndDate, challengeText, challengeStatus
   from challenge
-  where userIdx = ? and not challengeStatus = '3'
+  inner join user u on challenge.userIdx = u.userIdx
+  where challenge.userIdx = ? and not challengeStatus = '3'
   order by field(challengeStatus, '0', '1', '2');
   `;
   
@@ -191,14 +195,14 @@ async function getMyChallengeListInfo(userIdx) {
   return getMyChallengeListInfoRows;
 }
 
-// 
-
+// 챌린지 목록 관리 - 친구의 챌린지
 async function getFriendChallengeListInfo(observerIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getFriendChallengeListInfoQuery = `
-  select challengeDeclarer, challengeStartDate, challengeEndDate, challengeText, challengeStatus
+  select challengeDeclarer, u.userProfilePicture, challengeStartDate, challengeEndDate, challengeText, challengeStatus
   from challenge
   inner join declarerobserver d on challenge.challengeIdx = d.challengeIdx
+  inner join user u on ObserverIdx = u.userIdx
   where observerIdx = ? and observerStatus = 'F'
   order by field(challengeStatus, '0', '1', '2');
   `;

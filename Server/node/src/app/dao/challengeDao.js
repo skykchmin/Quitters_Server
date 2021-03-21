@@ -91,7 +91,7 @@ async function getMyChallengeInfo(userIdx) {
   select challengeIdx, challengeDeclarer, u.userProfilePicture ,challengeStartDate, challengeEndDate, challengeText, challengeCreateTime
   from challenge
   inner join user u on challenge.userIdx = u.userIdx
-  where challenge.userIdx = ?;
+  where challenge.userIdx = ? and challengeStatus = '0';
   `;
   const getMyChallengeInfoInfoParams = [userIdx]
   const getMyChallengeInfoInfoRows = await connection.query(
@@ -109,8 +109,8 @@ async function getFriendsChallengeInfo(observerIdx) {
   select challenge.challengeIdx, challengeDeclarer, u.userProfilePicture, challengeStartDate, challengeEndDate, challengeText, challengeStatus
   from challenge
   inner join declarerobserver d on challenge.challengeIdx = d.challengeIdx
-  inner join user u on ObserverIdx = u.userIdx
-  where ObserverIdx = ?;
+  inner join user u on challenge.userIdx = u.userIdx
+  where ObserverIdx = ? and challengeStatus = '0';
   `;
   const getFriendsChallengeInfoInfoParams = [observerIdx]
   const getFriendsChallengeInfoInfoRows = await connection.query(
@@ -199,10 +199,10 @@ async function getMyChallengeListInfo(userIdx) {
 async function getFriendChallengeListInfo(observerIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getFriendChallengeListInfoQuery = `
-  select challengeDeclarer, u.userProfilePicture, challengeStartDate, challengeEndDate, challengeText, challengeStatus
+  select challengeDeclarer, challengeStartDate, challengeEndDate, challengeText, challengeStatus, d.challengeIdx, u.userProfilePicture
   from challenge
   inner join declarerobserver d on challenge.challengeIdx = d.challengeIdx
-  inner join user u on ObserverIdx = u.userIdx
+  inner join user u on challenge.userIdx = u.userIdx
   where observerIdx = ? and observerStatus = 'F'
   order by field(challengeStatus, '0', '1', '2');
   `;

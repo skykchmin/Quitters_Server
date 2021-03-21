@@ -188,6 +188,36 @@ async function getUserInfo(userId) {
   return [userInfoRows];
 }
 
+
+//get User Push Info
+async function getUserPushInfo(userId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const getUserPushInfoQuery = `
+  SELECT userIdx,userPushStatus,userPushBanStatus FROM user WHERE userIdx = ${userId};
+                `;
+
+  const [userPushInfoRows] = await connection.query(
+    getUserPushInfoQuery
+  );
+  connection.release();
+  return [userPushInfoRows];
+}
+
+//get User Silence Push Info
+async function getUserSilenceInfo(userId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const getUserSilenceInfoQuery = `
+  SELECT notDisturbStartTime as startTime, notDisturbEndTime as endTime FROM alarm where userIdx = ${userId};
+                `;
+
+  const [userSilenceInfoRows] = await connection.query(
+    getUserSilenceInfoQuery
+  );
+  connection.release();
+  return [userSilenceInfoRows];
+}
+
+
 module.exports = {
   userIdCheck,
   insertUserInfo,
@@ -199,7 +229,9 @@ module.exports = {
   userIdChangeCheck,
   changeUserPassword,
   deleteUserInfo,
-  getUserInfo
+  getUserInfo,
+  getUserPushInfo,
+  getUserSilenceInfo
 };
 
 

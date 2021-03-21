@@ -484,6 +484,43 @@ exports.changePasswordInfo = async function (req, res) {
         }
 };
 
+// 유저 푸시 알림 정보
+ exports.getUserPush = async function (req, res) {
+
+    const id = req.verifiedToken.id;
+
+        try {
+            const [userPushInfoRows] = await userDao.getUserPushInfo(id);
+
+            if(userPushInfoRows[0].userPushBanStatus == 'Y'){
+
+                const [userSilenceInfoRows] = await userDao.getUserSilenceInfo(id);
+
+                return res.json({
+                    userInfo : userPushInfoRows[0],
+                    silenceInfo : userSilenceInfoRows[0],
+                    isSuccess: true,
+                    code: 1000,
+                    message: "회원 푸시 알림 정보 조회 성공!"
+                });
+            }
+
+           return res.json({
+                userInfo : userPushInfoRows[0],
+                isSuccess: true,
+                code: 1000,
+                message: "회원 푸시 알림 정보 조회 성공!"
+            });
+
+        } catch (err) {
+            return res.json({
+                isSuccess: false,
+                code: 2000,
+                message: "회원 푸시 알림 정보 조회 실패!",
+            });
+        }
+};
+
 /**
  update : 2021.03.04
  00.check API = token 검증

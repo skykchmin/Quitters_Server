@@ -170,7 +170,7 @@ exports.insertChallenge = async function (req, res) {
                 isSuccess: true,
                 code: 1000,
                 message: "챌린지 생성 성공",
-                data: insertChallengeInfoRows
+                challengeCode: challengeCode
 
             });
         } catch (err) {

@@ -68,14 +68,14 @@ async function deleteChallengeInfo(challengeIdx) {
 }
 
 // 챌린지 초대코드 확인
-async function challengeParticipationCodeCheck(challengeIdx) {
+async function challengeParticipationCodeCheck(challengeCode) {
   const connection = await pool.getConnection(async (conn) => conn);
   const challengeParticipationCodeCheckInfoQuery = `
-  select challengeCode
+  select challengeIdx, challengeCode
   from challenge
-  where challengeIdx = ?
+  where challengeCode = ?
   `;
-  const challengeParticipationCodeCheckInfoParams = [challengeIdx]
+  const challengeParticipationCodeCheckInfoParams = [challengeCode]
   const [challengeParticipationCodeCheckInfoRows] = await connection.query(
     challengeParticipationCodeCheckInfoQuery,
     challengeParticipationCodeCheckInfoParams

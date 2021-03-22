@@ -72,12 +72,14 @@ async function getChallengeCheckListContentInfo(challengeIdx) {
 async function getChallengeCertification_0Info(getChallengeCertification_0InfoParams) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getChallengeCertification_0InfoQuery = `
-  select userProfilePicture, userNickName, c.challengeCertificationTime, c.challengeCertificationStatus
-from declarerobserver
-inner join challengecertification c on declarerobserver.ObserverIdx = c.observerIdx
-inner join user on user.userIdx = declarerobserver.ObserverIdx
-where declarerobserver.challengeIdx = ? and declarerobserver.ObserverStatus = 'F'
-    and c.createdAt between concat(curdate(), ' 00:00:00') and concat(curdate(), ' 03:59:59');
+  select userNickName, userProfilePicture, declarerObserver.challengeCertificationStatus, declarerObserver.challengeCertificationTime
+  from user
+  inner join (select distinct c.observerIdx, c.challengeCertificationStatus, c.challengeIdx, c.createdAt, c.challengeCertificationTime
+  from declarerobserver
+  inner join challengecertification c on declarerobserver.challengeIdx = c.challengeIdx
+  where declarerobserver.challengeIdx = ? and declarerobserver.ObserverStatus = 'F'
+    and c.createdAt between concat(curdate(), ' 00:00:00') and concat(curdate(), ' 03:59:59')) as declarerObserver on userIdx = declarerObserver.observerIdx
+  order by field(challengeCertificationStatus, '3', '1', '2', '0');
   `;
   
   const getChallengeCertification_0InfoRows = await connection.query(
@@ -92,12 +94,14 @@ where declarerobserver.challengeIdx = ? and declarerobserver.ObserverStatus = 'F
 async function getChallengeCertification_4Info(getChallengeCertification_4InfoParams) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getChallengeCertification_4InfoQuery = `
-  select userProfilePicture, userNickName, c.challengeCertificationTime, c.challengeCertificationStatus
+  select userNickName, userProfilePicture, declarerObserver.challengeCertificationStatus, declarerObserver.challengeCertificationTime
+  from user
+  inner join (select distinct c.observerIdx, c.challengeCertificationStatus, c.challengeIdx, c.createdAt, c.challengeCertificationTime
   from declarerobserver
-  inner join challengecertification c on declarerobserver.ObserverIdx = c.observerIdx
-  inner join user on user.userIdx = declarerobserver.ObserverIdx
+  inner join challengecertification c on declarerobserver.challengeIdx = c.challengeIdx
   where declarerobserver.challengeIdx = ? and declarerobserver.ObserverStatus = 'F'
-    and c.createdAt between concat(curdate(), ' 04:00:00') and concat(curdate(), ' 07:59:59');
+    and c.createdAt between concat(curdate(), ' 04:00:00') and concat(curdate(), ' 07:59:59')) as declarerObserver on userIdx = declarerObserver.observerIdx
+  order by field(challengeCertificationStatus, '3', '1', '2', '0');
   `;
   
   const getChallengeCertification_4InfoRows = await connection.query(
@@ -112,12 +116,14 @@ async function getChallengeCertification_4Info(getChallengeCertification_4InfoPa
 async function getChallengeCertification_8Info(getChallengeCertification_8InfoParams) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getChallengeCertification_8InfoQuery = `
-  select userProfilePicture, userNickName, c.challengeCertificationTime, c.challengeCertificationStatus
+  select userNickName, userProfilePicture, declarerObserver.challengeCertificationStatus, declarerObserver.challengeCertificationTime
+  from user
+  inner join (select distinct c.observerIdx, c.challengeCertificationStatus, c.challengeIdx, c.createdAt, c.challengeCertificationTime
   from declarerobserver
-  inner join challengecertification c on declarerobserver.ObserverIdx = c.observerIdx
-  inner join user on user.userIdx = declarerobserver.ObserverIdx
+  inner join challengecertification c on declarerobserver.challengeIdx = c.challengeIdx
   where declarerobserver.challengeIdx = ? and declarerobserver.ObserverStatus = 'F'
-    and c.createdAt between concat(curdate(), ' 08:00:00') and concat(curdate(), ' 11:59:59');
+    and c.createdAt between concat(curdate(), ' 08:00:00') and concat(curdate(), ' 11:59:59')) as declarerObserver on userIdx = declarerObserver.observerIdx
+  order by field(challengeCertificationStatus, '3', '1', '2', '0');
   `;
   
   const getChallengeCertification_8InfoRows = await connection.query(
@@ -132,12 +138,14 @@ async function getChallengeCertification_8Info(getChallengeCertification_8InfoPa
 async function getChallengeCertification_12Info(getChallengeCertification_12InfoParams) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getChallengeCertification_12InfoQuery = `
-  select userProfilePicture, userNickName, c.challengeCertificationTime, c.challengeCertificationStatus
+  select userNickName, userProfilePicture, declarerObserver.challengeCertificationStatus, declarerObserver.challengeCertificationTime
+  from user
+  inner join (select distinct c.observerIdx, c.challengeCertificationStatus, c.challengeIdx, c.createdAt, c.challengeCertificationTime
   from declarerobserver
-  inner join challengecertification c on declarerobserver.ObserverIdx = c.observerIdx
-  inner join user on user.userIdx = declarerobserver.ObserverIdx
+  inner join challengecertification c on declarerobserver.challengeIdx = c.challengeIdx
   where declarerobserver.challengeIdx = ? and declarerobserver.ObserverStatus = 'F'
-    and c.createdAt between concat(curdate(), ' 12:00:00') and concat(curdate(), ' 15:59:59');
+    and c.createdAt between concat(curdate(), ' 12:00:00') and concat(curdate(), ' 15:59:59')) as declarerObserver on userIdx = declarerObserver.observerIdx
+  order by field(challengeCertificationStatus, '3', '1', '2', '0');
   `;
   
   const getChallengeCertification_12InfoRows = await connection.query(
@@ -152,12 +160,14 @@ async function getChallengeCertification_12Info(getChallengeCertification_12Info
 async function getChallengeCertification_16Info(getChallengeCertification_16InfoParams) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getChallengeCertification_16InfoQuery = `
-  select userProfilePicture, userNickName, c.challengeCertificationTime, c.challengeCertificationStatus
+  select userNickName, userProfilePicture, declarerObserver.challengeCertificationStatus, declarerObserver.challengeCertificationTime
+  from user
+  inner join (select distinct c.observerIdx, c.challengeCertificationStatus, c.challengeIdx, c.createdAt, c.challengeCertificationTime
   from declarerobserver
-  inner join challengecertification c on declarerobserver.ObserverIdx = c.observerIdx
-  inner join user on user.userIdx = declarerobserver.ObserverIdx
+  inner join challengecertification c on declarerobserver.challengeIdx = c.challengeIdx
   where declarerobserver.challengeIdx = ? and declarerobserver.ObserverStatus = 'F'
-    and c.createdAt between concat(curdate(), ' 16:00:00') and concat(curdate(), ' 19:59:59');
+    and c.createdAt between concat(curdate(), ' 16:00:00') and concat(curdate(), ' 19:59:59')) as declarerObserver on userIdx = declarerObserver.observerIdx
+  order by field(challengeCertificationStatus, '3', '1', '2', '0');
   `;
   
   const getChallengeCertification_16InfoRows = await connection.query(
@@ -172,12 +182,14 @@ async function getChallengeCertification_16Info(getChallengeCertification_16Info
 async function getChallengeCertification_20Info(getChallengeCertification_20InfoParams) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getChallengeCertification_20InfoQuery = `
-  select userProfilePicture, userNickName, c.challengeCertificationTime, c.challengeCertificationStatus
+  select userNickName, userProfilePicture, declarerObserver.challengeCertificationStatus, declarerObserver.challengeCertificationTime
+  from user
+  inner join (select distinct c.observerIdx, c.challengeCertificationStatus, c.challengeIdx, c.createdAt, c.challengeCertificationTime
   from declarerobserver
-  inner join challengecertification c on declarerobserver.ObserverIdx = c.observerIdx
-  inner join user on user.userIdx = declarerobserver.ObserverIdx
+  inner join challengecertification c on declarerobserver.challengeIdx = c.challengeIdx
   where declarerobserver.challengeIdx = ? and declarerobserver.ObserverStatus = 'F'
-    and c.createdAt between concat(curdate(), ' 20:00:00') and concat(curdate(), ' 23:59:59');
+    and c.createdAt between concat(curdate(), ' 20:00:00') and concat(curdate(), ' 23:59:59')) as declarerObserver on userIdx = declarerObserver.observerIdx
+  order by field(challengeCertificationStatus, '3', '1', '2', '0');
   `;
   
   const getChallengeCertification_20InfoRows = await connection.query(

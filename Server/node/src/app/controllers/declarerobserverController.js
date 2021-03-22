@@ -14,28 +14,17 @@ exports.insertChallengeParticipation = async function (req, res) {
         challengeCode
     } = req.body;
 
-    const challengeIdx = req.params.challengeIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
-    const observerIdx = req.params.observerIdx; 
-
     const connection = await pool.getConnection(); // 트랜잭션 시작
 
     // if (checkString(challengeDeclarer) == false){
     //     return res.json({isSuccess: false, code: 2501, message: "문자를 이용해주세요"});
     // }
     
-    if(!challengeIdx){
+    if(!challengeCode){
         return res.json({
             isSuccess: false, 
             code: 2560, 
-            message: "챌린지 번호를 입력해주세요"
-        });
-    }
-
-    if(!observerIdx){
-        return res.json({
-            isSuccess: false, 
-            code: 2561, 
-            message: "감시자 번호를 입력해주세요"
+            message: "챌린지 코드를 입력해주세요"
         });
     }
 

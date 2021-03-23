@@ -72,7 +72,7 @@ async function getChallengeCheckListContentInfo(challengeIdx) {
 async function getChallengeCertification_0Info(getChallengeCertification_0InfoParams) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getChallengeCertification_0InfoQuery = `
-  select userNickName, userProfilePicture, declarerObserver.challengeCertificationStatus, declarerObserver.challengeCertificationTime
+  select userNickName, userProfilePicture, declarerObserver.challengeCertificationStatus, declarerObserver.challengeCertificationTime, declarerObserver.observerIdx
   from user
   inner join (select distinct c.observerIdx, c.challengeCertificationStatus, c.challengeIdx, c.createdAt, c.challengeCertificationTime
   from declarerobserver
@@ -94,7 +94,7 @@ async function getChallengeCertification_0Info(getChallengeCertification_0InfoPa
 async function getChallengeCertification_4Info(getChallengeCertification_4InfoParams) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getChallengeCertification_4InfoQuery = `
-  select userNickName, userProfilePicture, declarerObserver.challengeCertificationStatus, declarerObserver.challengeCertificationTime
+  select userNickName, userProfilePicture, declarerObserver.challengeCertificationStatus, declarerObserver.challengeCertificationTime, declarerObserver.observerIdx
   from user
   inner join (select distinct c.observerIdx, c.challengeCertificationStatus, c.challengeIdx, c.createdAt, c.challengeCertificationTime
   from declarerobserver
@@ -116,7 +116,7 @@ async function getChallengeCertification_4Info(getChallengeCertification_4InfoPa
 async function getChallengeCertification_8Info(getChallengeCertification_8InfoParams) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getChallengeCertification_8InfoQuery = `
-  select userNickName, userProfilePicture, declarerObserver.challengeCertificationStatus, declarerObserver.challengeCertificationTime
+  select userNickName, userProfilePicture, declarerObserver.challengeCertificationStatus, declarerObserver.challengeCertificationTime, declarerObserver.observerIdx
   from user
   inner join (select distinct c.observerIdx, c.challengeCertificationStatus, c.challengeIdx, c.createdAt, c.challengeCertificationTime
   from declarerobserver
@@ -138,7 +138,7 @@ async function getChallengeCertification_8Info(getChallengeCertification_8InfoPa
 async function getChallengeCertification_12Info(getChallengeCertification_12InfoParams) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getChallengeCertification_12InfoQuery = `
-  select userNickName, userProfilePicture, declarerObserver.challengeCertificationStatus, declarerObserver.challengeCertificationTime
+  select userNickName, userProfilePicture, declarerObserver.challengeCertificationStatus, declarerObserver.challengeCertificationTime, declarerObserver.observerIdx
   from user
   inner join (select distinct c.observerIdx, c.challengeCertificationStatus, c.challengeIdx, c.createdAt, c.challengeCertificationTime
   from declarerobserver
@@ -160,7 +160,7 @@ async function getChallengeCertification_12Info(getChallengeCertification_12Info
 async function getChallengeCertification_16Info(getChallengeCertification_16InfoParams) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getChallengeCertification_16InfoQuery = `
-  select userNickName, userProfilePicture, declarerObserver.challengeCertificationStatus, declarerObserver.challengeCertificationTime
+  select userNickName, userProfilePicture, declarerObserver.challengeCertificationStatus, declarerObserver.challengeCertificationTime, declarerObserver.observerIdx
   from user
   inner join (select distinct c.observerIdx, c.challengeCertificationStatus, c.challengeIdx, c.createdAt, c.challengeCertificationTime
   from declarerobserver
@@ -182,7 +182,7 @@ async function getChallengeCertification_16Info(getChallengeCertification_16Info
 async function getChallengeCertification_20Info(getChallengeCertification_20InfoParams) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getChallengeCertification_20InfoQuery = `
-  select userNickName, userProfilePicture, declarerObserver.challengeCertificationStatus, declarerObserver.challengeCertificationTime
+  select userNickName, userProfilePicture, declarerObserver.challengeCertificationStatus, declarerObserver.challengeCertificationTime, declarerObserver.observerIdx
   from user
   inner join (select distinct c.observerIdx, c.challengeCertificationStatus, c.challengeIdx, c.createdAt, c.challengeCertificationTime
   from declarerobserver

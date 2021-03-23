@@ -418,7 +418,7 @@ exports.getChallengeFailMessage = async function (req, res) {
     // const { id } = req.verifiedToken;
 
     const challengeIdx = req.params.challengeIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
-    const observerIdx = req.params.observerIdx;
+    // const observerIdx = req.params.observerIdx;
 
     if(!challengeIdx){
         return res.json({
@@ -428,17 +428,17 @@ exports.getChallengeFailMessage = async function (req, res) {
         });
     }
 
-    if(!observerIdx){
-        return res.json({
-            isSuccess: false, 
-            code: 2701, 
-            message: "감시자 번호를 입력해주세요"
-        });
-    }
+    // if(!observerIdx){
+    //     return res.json({
+    //         isSuccess: false, 
+    //         code: 2701, 
+    //         message: "감시자 번호를 입력해주세요"
+    //     });
+    // }
 
         try {
             
-            const getChallengeFailMessageParams = [challengeIdx, observerIdx];
+            const getChallengeFailMessageParams = [challengeIdx];
             const getChallengeFailMessageInfoRows = await challengeDao.getChallengeFailMessageInfo(getChallengeFailMessageParams); // 나의 챌린지 조회
             
             return res.json({

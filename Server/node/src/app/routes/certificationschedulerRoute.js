@@ -12,7 +12,7 @@ module.exports = function(app){
         timezone: "Asia/Seoul"
     }); // 챌린지 중간 인증 추가
 
-    cron.schedule('0 0-23/4 1-31 * *', certificationscheduler.patchAutoChallengeIntermediateCertification, {
+    cron.schedule('1 0 0-23/4 1-31 * *', certificationscheduler.patchAutoChallengeIntermediateCertification, {
         timezone: "Asia/Seoul"
     }); // 챌린지 중간 인증 자동 전환
 

@@ -160,11 +160,12 @@ async function getChallengeObserverInfo(challengeIdx) {
 async function getChallengeFailMessageInfo(getChallengeFailMessageInfoParams) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getChallengeFailMessageInfoQuery = `
-  select challengeDeclarer, u.userNickName, challengeFailText
-  from challenge
-  inner join challengecertification c on challenge.challengeIdx = c.challengeIdx
-  inner join user u on c.observerIdx = u.userIdx
-  where c.challengeIdx = ? and c.observerIdx = ? and c.challengeCertificationStatus = '3';
+  select userNickName, challengeFailText
+from user
+inner join (select c.observerIdx, challengeFailText
+from challenge
+inner join challengecertification c on challenge.challengeIdx = c.challengeIdx
+where challenge.challengeIdx = ? and challenge.challengeStatus = '2' and c.challengeCertificationStatus ='3') as observerInfo on observerIdx = userIdx
   `;
   
   const [getChallengeFailMessageInfoRows] = await connection.query(

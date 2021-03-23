@@ -302,6 +302,25 @@ async function getChallengeIntermediateCertification_20Info(getChallengeIntermed
   return getChallengeIntermediateCertification_20InfoRows;
 }
 
+// 어제날짜부터 업데이트를 해야한다!!
+// 20~24시 중간 인증 자동전환 - 성공
+async function patchChallengeIntermediateCertificationSuccessInfo_20(challengeIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const patchChallengeIntermediateCertificationInfoInfoQuery_20 = `
+  update challengeintermediatecertification ci
+  set ChallengeIntermediateCertificationStatus = '1'
+  where challengeIdx = ? and ci.createdAt between concat(curdate() - interval 1 day , ' 20:00:00') and concat(curdate() - interval 1 day , ' 23:59:59');
+  `;
+  
+  const patchChallengeIntermediateCertificationInfoParams_20 = [challengeIdx];
+  const patchChallengeIntermediateCertificationInfoInfoRows_20 = await connection.query(
+    patchChallengeIntermediateCertificationInfoInfoQuery_20,
+    patchChallengeIntermediateCertificationInfoParams_20
+  );
+  connection.release();
+  return patchChallengeIntermediateCertificationInfoInfoRows_20;
+}
+
 
 // 0~4시 중간 인증 자동전환 - 성공
 async function patchChallengeIntermediateCertificationSuccessInfo_0(challengeIdx) {
@@ -391,24 +410,6 @@ async function patchChallengeIntermediateCertificationSuccessInfo_16(challengeId
   );
   connection.release();
   return patchChallengeIntermediateCertificationInfoInfoRows_16;
-}
-
-// 20~24시 중간 인증 자동전환 - 성공
-async function patchChallengeIntermediateCertificationSuccessInfo_20(challengeIdx) {
-  const connection = await pool.getConnection(async (conn) => conn);
-  const patchChallengeIntermediateCertificationInfoInfoQuery_20 = `
-  update challengeintermediatecertification ci
-  set ChallengeIntermediateCertificationStatus = '1'
-  where challengeIdx = ? and ci.createdAt between concat(curdate(), ' 20:00:00') and concat(curdate(), ' 23:59:59');
-  `;
-  
-  const patchChallengeIntermediateCertificationInfoParams_20 = [challengeIdx];
-  const patchChallengeIntermediateCertificationInfoInfoRows_20 = await connection.query(
-    patchChallengeIntermediateCertificationInfoInfoQuery_20,
-    patchChallengeIntermediateCertificationInfoParams_20
-  );
-  connection.release();
-  return patchChallengeIntermediateCertificationInfoInfoRows_20;
 }
 
 

@@ -41,7 +41,7 @@ async function patchDeclarerObserverInfo(patchDeclarerObserverInfoParams) {
   set ObserverStatus =
     case
         when ObserverStatus = 'F' then 'N'
-        when ObserverStatus = 'N' then 'F'
+        when ObserverStatus = 'N' then 'N'
     end
   where challengeIdx = ? and ObserverIdx = ?;
   `;

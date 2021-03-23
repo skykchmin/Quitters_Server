@@ -69,7 +69,7 @@ exports.updateIntermediateCertification = async function (req, res) {
             const getChallengeStatusInfoRows = await certificationschedulerDao.getChallengeStatusInfo(); // 챌린지 진행여부 조회
 
             for(var i = 0; i < getChallengeStatusInfoRows[0].length; i++){
-                console.log(getChallengeStatusInfoRows[0][i])
+                // console.log(getChallengeStatusInfoRows[0][i])
                 // console.log(getChallengeStatusInfoRows[0][i].challengeIdx)
                 var updateCertificationIntermediateChallengeIdx = getChallengeStatusInfoRows[0][i].challengeIdx;
                 const updateChallengeIntermediateCertificationInfoParams = [updateCertificationIntermediateChallengeIdx];
@@ -256,7 +256,7 @@ exports.patchAutoChallengeIntermediateCertification = async function (req, res) 
         } catch (err) {
             await connection.rollback(); // ROLLBACK
            // connection.release();
-            logger.error(`App - 챌린지 중간 인증 상태 16시~20시 성공 전환 Query error\n: ${JSON.stringify(err)}`);
+            logger.error(`App - 챌린지 중간 인증 상태 16시~20시 성공 전환 Query error\n: ${err.message}`);
             return false;
         } finally {
             connection.release();

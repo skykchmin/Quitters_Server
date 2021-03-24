@@ -521,6 +521,34 @@ exports.changePasswordInfo = async function (req, res) {
         }
 };
 
+
+exports.setDeviceToken = async function (req, res) {
+
+    const id = req.verifiedToken.id;
+    const deviceToken = req.body.deviceToken;
+
+    if(deviceToken == "undefined" || deviceToken == null || deviceToken == ""){
+        return res.json({isSuccess: false, code: 2410, message: "디바이스 토큰을 입력하세요"});
+    }
+
+        try {
+            const [userInfoRows] = await userDao.setUserDeviceInfo(id,deviceToken);
+
+           return res.json({
+                isSuccess: true,
+                code: 1000,
+                message: "회원 디바이스 토큰 갱신 성공!"
+            });
+
+        } catch (err) {
+            return res.json({
+                isSuccess: false,
+                code: 2000,
+                message: "회원 디바이스 토큰 갱신 실패!",
+            });
+        }
+};
+
 /**
  update : 2021.03.04
  00.check API = token 검증

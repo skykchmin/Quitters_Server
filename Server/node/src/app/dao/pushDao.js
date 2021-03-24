@@ -252,6 +252,48 @@ async function setUserSilenceOff(userId) {
   return [offUserSilenceRows];
 }
 
+async function challengeCheck(userId,challengeId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const checkChallengeQuery = `
+  SELECT challengeDeclarer FROM challenge WHERE userIdx = ${userId} AND challengeIdx = ${challengeId};
+                `;
+
+  const [checkChallengeRows] = await connection.query(
+    checkChallengeQuery
+  );
+  connection.release();
+  return [checkChallengeRows];
+}
+
+async function checkObserver(challengeId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const checkObserverQuery = `
+  SELECT ObserverIdx FROM declarerobserver WHERE challengeIdx = ${challengeId};
+                `;
+
+  const [checkObserverRows] = await connection.query(
+    checkObserverQuery
+  );
+  connection.release();
+  return [checkObserverRows];
+}
+
+async function getDeviceToken(challengeId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const getDeviceTokenQuery = `
+  SELECT user.userDeviceToken FROM declarerobserver
+JOIN user ON user.userIdx = declarerobserver.ObserverIdx
+WHERE challengeIdx = ${challengeId} AND user.userPushStatus = 'Y' AND NOT user.userDeviceToken = 'default';
+                `;
+
+  const [getDeviceTokenRows] = await connection.query(
+    getDeviceTokenQuery
+  );
+  connection.release();
+  return [getDeviceTokenRows];
+}
+
+
 
 module.exports = {
   setUserPush,
@@ -261,7 +303,10 @@ module.exports = {
   checkSilence,
   insertSilence,
   updateSilence,
-  setUserSilenceOff
+  setUserSilenceOff,
+  challengeCheck,
+  checkObserver,
+  getDeviceToken
 };
 
 

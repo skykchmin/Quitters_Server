@@ -680,7 +680,46 @@ async function patchChallengeFailInfo(patchChallengeFailInfoParams) {
 //   return getChallengeDeclarerObserverInfoInfoRows;
 // }
 
+async function getDeviceToken(challengeId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const getDeviceTokenQuery = `
+  SELECT user.userDeviceToken FROM declarerobserver
+JOIN user ON user.userIdx = declarerobserver.ObserverIdx
+WHERE challengeIdx = ${challengeId} AND user.userPushStatus = 'Y' AND NOT user.userDeviceToken = 'default';
+                `;
 
+  const [getDeviceTokenRows] = await connection.query(
+    getDeviceTokenQuery
+  );
+  connection.release();
+  return [getDeviceTokenRows];
+}
+
+async function challengeCheck(challengeId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const checkChallengeQuery = `
+  SELECT challengeDeclarer FROM challenge WHERE challengeIdx = ${challengeId};
+                `;
+
+  const [checkChallengeRows] = await connection.query(
+    checkChallengeQuery
+  );
+  connection.release();
+  return [checkChallengeRows];
+}
+
+async function getFailUser(userId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const failUserQuery = `
+  SELECT userNickName FROM user WHERE userIdx = ${userId};
+                `;
+
+  const [failUserRows] = await connection.query(
+    failUserQuery
+  );
+  connection.release();
+  return [failUserRows];
+}
 
 module.exports = {
     insertChallengeCertificationInfo,
@@ -721,5 +760,8 @@ module.exports = {
     patchChallengeCertificationInfo_16,
     patchChallengeCertificationInfo_20,
 
-    patchChallengeFailInfo
+    patchChallengeFailInfo,
+    getDeviceToken,
+    challengeCheck,
+    getFailUser
 };

@@ -6,6 +6,16 @@ const jwt = require('jsonwebtoken');
 const pushDao = require('../dao/pushDao');
 
 
+const config = {
+    apiKey: "AIzaSyAMuxxEj8mcAVMz-O7p_HNST6ebTbNf3co",
+    authDomain: "nosmoking-dev.firebaseapp.com",
+    appId: "1:263372481580:android:ac7d61d57585bce312dd89",
+    messagingSenderId: "263372481580"
+};
+
+
+const admin = require('firebase-admin');
+
 // 푸시 알람 설정
 exports.setPush = async function (req, res) {
 
@@ -187,4 +197,76 @@ exports.setSilenceOff = async function (req, res) {
                 message: "방해 금지 모드 해제 실패",
             });
         }
+};
+
+
+// 인증 요청 메시지 전송
+
+exports.postRequest = async function (req, res) {
+
+    if (!admin.apps.length) {
+        admin.initializeApp({
+            credential: admin.credential.applicationDefault()
+        });
+    }
+
+    const challengeId = req.body.challengeId;
+    const id = req.verifiedToken.id;
+
+    const [userChallengeInfoRows] = await pushDao.challengeCheck(id, challengeId);
+
+    if (userChallengeInfoRows.length < 1) {
+        return res.json({
+            isSuccess: false,
+            code: 2420,
+            message: "인증 요청 권한이 없습니다.",
+        });
+    }
+    const [observerCheckRows] = await pushDao.checkObserver(challengeId);
+
+    if (observerCheckRows.length < 1) {
+        return res.json({
+            isSuccess: false,
+            code: 2421,
+            message: "참여중인 감시자가 없습니다.",
+        });
+    }
+
+    const [registrationTokens] = await pushDao.getDeviceToken(challengeId);
+
+    if (registrationTokens.length < 1) {
+        return res.json({
+            isSuccess: false,
+            code: 2422,
+            message: "알림 기능을 켜둔 감시자가 없습니다.",
+        });
+    }
+
+    const message = {
+        notification: {
+            title: userChallengeInfoRows[0].challengeDeclarer + ' 님의 챌린지가 잘 진행되고 있나요?',
+            body: userChallengeInfoRows[0].challengeDeclarer + ' 님이 챌린지 인증을 요청하였습니다.'
+        },
+        data: { score: '850', time: '2:45' },
+        tokens: registrationTokens,
+    }
+
+    await admin.messaging().sendMulticast(message)
+        .then((response) => {
+            // Response is a message ID string.
+            console.log(response.successCount + ' messages were sent successfully');
+            return res.json({
+                isSuccess: true,
+                code: 1000,
+                message: "푸시 알림 전송 성공"
+            });
+        })
+        .catch((error) => {
+            console.log('Error sending message:', error);
+            return res.json({
+                isSuccess: false,
+                code: 2000,
+                message: "푸시 알림 전송 실패"
+            });
+        });
 };

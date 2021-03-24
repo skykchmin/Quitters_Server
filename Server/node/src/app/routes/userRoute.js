@@ -12,6 +12,8 @@ module.exports = function(app){
     app.patch('/users-password',jwtMiddleware,user.changePasswordInfo);
     app.patch('/users',jwtMiddleware,user.deleteUser);
 
+    app.patch('/users/device-token',jwtMiddleware,user.setDeviceToken);
+
     app.get('/users/push',jwtMiddleware,user.getUserPush);
 
     app.get('/check', jwtMiddleware, user.check);

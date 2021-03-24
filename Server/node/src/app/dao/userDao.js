@@ -217,6 +217,21 @@ async function getUserSilenceInfo(userId) {
   return [userSilenceInfoRows];
 }
 
+// 디바이스 토큰 갱신
+
+async function setUserDeviceInfo(userId,deviceToken) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const setDeviceTokenInfoQuery = `
+  UPDATE user SET userDeviceToken = '${deviceToken}' WHERE userIdx = ${userId};
+                `;
+
+  const [deviceTokenInfoRows] = await connection.query(
+    setDeviceTokenInfoQuery
+  );
+  connection.release();
+  return [deviceTokenInfoRows];
+}
+
 
 module.exports = {
   userIdCheck,
@@ -231,7 +246,8 @@ module.exports = {
   deleteUserInfo,
   getUserInfo,
   getUserPushInfo,
-  getUserSilenceInfo
+  getUserSilenceInfo,
+  setUserDeviceInfo
 };
 
 

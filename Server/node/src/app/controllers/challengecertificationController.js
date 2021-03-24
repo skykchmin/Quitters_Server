@@ -3,6 +3,16 @@ const { logger } = require('../../../config/winston');
 const challengecertificationDao = require('../dao/challengecertificationDao');
 const { constants } = require('buffer');
 
+const config = {
+    apiKey: "AIzaSyAMuxxEj8mcAVMz-O7p_HNST6ebTbNf3co",
+    authDomain: "nosmoking-dev.firebaseapp.com",
+    appId: "1:263372481580:android:ac7d61d57585bce312dd89",
+    messagingSenderId: "263372481580"
+};
+
+
+const admin = require('firebase-admin');
+
 exports.getChallengeCertification = async function (req, res) {
     // const { id } = req.verifiedToken;
     const challengeIdx = req.params.challengeIdx; // 패스 variable route에 있는 변수와 params. 뒤에오는 거랑일치시킬것
@@ -249,6 +259,47 @@ exports.patchChallengeCertification = async function (req, res) {
                     const patchChallengeFailInfoRows = await challengecertificationDao.patchChallengeFailInfo(patchChallengeFailInfoParams); // 챌린지 실패 전환 - 즉시 실패 전환
                     const patchChallengeIntermediateCertificationFailInfoRows_0 = await challengecertificationDao.patchChallengeIntermediateCertificationFailInfo_0(challengeIdx); // 챌린지 중간 인증 실패
 
+                    if (!admin.apps.length) {
+                        admin.initializeApp({
+                            credential: admin.credential.applicationDefault()
+                        });
+                    }
+                    const [userChallengeInfoRows] = await challengecertificationDao.challengeCheck(challengeIdx);
+
+                    const [registrationTokens] = await challengecertificationDao.getDeviceToken(challengeIdx);
+
+                    const [failUserInfoRows] = await challengecertificationDao.getFailUser(observerIdx);
+
+                    if (registrationTokens.length < 1) {
+                        return res.json({
+                            isSuccess: true,
+                            code: 1010,
+                            message: "알림 기능을 켜둔 감시자가 없습니다. 챌린지 중간 상태(사용자입력)-실패 변경 성공",
+                        });
+                    }
+
+                    const message = {
+                        notification: {
+                            title: userChallengeInfoRows[0].challengeDeclarer + ' 님의 챌린지가 실패했습니다.',
+                            body: failUserInfoRows[0].userNickName + " 님이"+"'"+challengeFailText+"'"+"이라는 실패 사유를 작성했습니다."
+                        },
+                        data: { score: '850', time: '2:45' },
+                        tokens: registrationTokens,
+                    }
+
+                    await admin.messaging().sendMulticast(message)
+                        .then((response) => {
+                            // Response is a message ID string.
+                            console.log(response.successCount + ' messages were sent successfully');
+                        })
+                        .catch((error) => {
+                            console.log('Error sending message:', error);
+                            return res.json({
+                                isSuccess: false,
+                                code: 2000,
+                                message: "푸시 알림 전송 실패"
+                            });
+                        });
                     return res.json({
                         isSuccess: true,
                         code: 1000,
@@ -294,6 +345,48 @@ exports.patchChallengeCertification = async function (req, res) {
                     const patchChallengeFailInfoRows = await challengecertificationDao.patchChallengeFailInfo(patchChallengeFailInfoParams); // 챌린지 실패 전환 - 즉시 실패 전환
                     const patchChallengeIntermediateCertificationFailInfoRows_4 = await challengecertificationDao.patchChallengeIntermediateCertificationFailInfo_4(challengeIdx); // 챌린지 중간 인증 실패
 
+                    if (!admin.apps.length) {
+                        admin.initializeApp({
+                            credential: admin.credential.applicationDefault()
+                        });
+                    }
+                    const [userChallengeInfoRows] = await challengecertificationDao.challengeCheck(challengeIdx);
+
+                    const [registrationTokens] = await challengecertificationDao.getDeviceToken(challengeIdx);
+
+                    const [failUserInfoRows] = await challengecertificationDao.getFailUser(observerIdx);
+
+                    if (registrationTokens.length < 1) {
+                        return res.json({
+                            isSuccess: true,
+                            code: 1010,
+                            message: "알림 기능을 켜둔 감시자가 없습니다. 챌린지 중간 상태(사용자입력)-실패 변경 성공",
+                        });
+                    }
+
+                    const message = {
+                        notification: {
+                            title: userChallengeInfoRows[0].challengeDeclarer + ' 님의 챌린지가 실패했습니다.',
+                            body: failUserInfoRows[0].userNickName + " 님이"+"'"+challengeFailText+"'"+"이라는 실패 사유를 작성했습니다."
+                        },
+                        data: { score: '850', time: '2:45' },
+                        tokens: registrationTokens,
+                    }
+
+                    await admin.messaging().sendMulticast(message)
+                        .then((response) => {
+                            // Response is a message ID string.
+                            console.log(response.successCount + ' messages were sent successfully');
+                        })
+                        .catch((error) => {
+                            console.log('Error sending message:', error);
+                            return res.json({
+                                isSuccess: false,
+                                code: 2000,
+                                message: "푸시 알림 전송 실패"
+                            });
+                        });
+
                     return res.json({
                         isSuccess: true,
                         code: 1000,
@@ -337,6 +430,48 @@ exports.patchChallengeCertification = async function (req, res) {
                     const patchChallengeCertificationInfoRows_8 = await challengecertificationDao.patchChallengeCertificationInfo_8(patchChallengeCertificationInfoParams); // 챌린지 인증 상태 변경
                     const patchChallengeFailInfoRows = await challengecertificationDao.patchChallengeFailInfo(patchChallengeFailInfoParams); // 챌린지 실패 전환 - 즉시 실패 전환
                     const patchChallengeIntermediateCertificationFailInfoRows_8 = await challengecertificationDao.patchChallengeIntermediateCertificationFailInfo_8(challengeIdx); // 챌린지 중간 인증 실패
+
+                    if (!admin.apps.length) {
+                        admin.initializeApp({
+                            credential: admin.credential.applicationDefault()
+                        });
+                    }
+                    const [userChallengeInfoRows] = await challengecertificationDao.challengeCheck(challengeIdx);
+
+                    const [registrationTokens] = await challengecertificationDao.getDeviceToken(challengeIdx);
+
+                    const [failUserInfoRows] = await challengecertificationDao.getFailUser(observerIdx);
+
+                    if (registrationTokens.length < 1) {
+                        return res.json({
+                            isSuccess: true,
+                            code: 1010,
+                            message: "알림 기능을 켜둔 감시자가 없습니다. 챌린지 중간 상태(사용자입력)-실패 변경 성공",
+                        });
+                    }
+
+                    const message = {
+                        notification: {
+                            title: userChallengeInfoRows[0].challengeDeclarer + ' 님의 챌린지가 실패했습니다.',
+                            body: failUserInfoRows[0].userNickName + " 님이"+"'"+challengeFailText+"'"+"이라는 실패 사유를 작성했습니다."
+                        },
+                        data: { score: '850', time: '2:45' },
+                        tokens: registrationTokens,
+                    }
+
+                    await admin.messaging().sendMulticast(message)
+                        .then((response) => {
+                            // Response is a message ID string.
+                            console.log(response.successCount + ' messages were sent successfully');
+                        })
+                        .catch((error) => {
+                            console.log('Error sending message:', error);
+                            return res.json({
+                                isSuccess: false,
+                                code: 2000,
+                                message: "푸시 알림 전송 실패"
+                            });
+                        });
 
                     return res.json({
                         isSuccess: true,
@@ -382,6 +517,48 @@ exports.patchChallengeCertification = async function (req, res) {
                     const patchChallengeFailInfoRows = await challengecertificationDao.patchChallengeFailInfo(patchChallengeFailInfoParams); // 챌린지 실패 전환 - 즉시 실패 전환
                     const patchChallengeIntermediateCertificationFailInfoRows_12 = await challengecertificationDao.patchChallengeIntermediateCertificationFailInfo_12(challengeIdx); // 챌린지 중간 인증 실패
 
+                    if (!admin.apps.length) {
+                        admin.initializeApp({
+                            credential: admin.credential.applicationDefault()
+                        });
+                    }
+                    const [userChallengeInfoRows] = await challengecertificationDao.challengeCheck(challengeIdx);
+
+                    const [registrationTokens] = await challengecertificationDao.getDeviceToken(challengeIdx);
+
+                    const [failUserInfoRows] = await challengecertificationDao.getFailUser(observerIdx);
+
+                    if (registrationTokens.length < 1) {
+                        return res.json({
+                            isSuccess: true,
+                            code: 1010,
+                            message: "알림 기능을 켜둔 감시자가 없습니다. 챌린지 중간 상태(사용자입력)-실패 변경 성공",
+                        });
+                    }
+
+                    const message = {
+                        notification: {
+                            title: userChallengeInfoRows[0].challengeDeclarer + ' 님의 챌린지가 실패했습니다.',
+                            body: failUserInfoRows[0].userNickName + " 님이"+"'"+challengeFailText+"'"+"이라는 실패 사유를 작성했습니다."
+                        },
+                        data: { score: '850', time: '2:45' },
+                        tokens: registrationTokens,
+                    }
+
+                    await admin.messaging().sendMulticast(message)
+                        .then((response) => {
+                            // Response is a message ID string.
+                            console.log(response.successCount + ' messages were sent successfully');
+                        })
+                        .catch((error) => {
+                            console.log('Error sending message:', error);
+                            return res.json({
+                                isSuccess: false,
+                                code: 2000,
+                                message: "푸시 알림 전송 실패"
+                            });
+                        });
+
                     return res.json({
                         isSuccess: true,
                         code: 1000,
@@ -426,6 +603,48 @@ exports.patchChallengeCertification = async function (req, res) {
                     const patchChallengeFailInfoRows = await challengecertificationDao.patchChallengeFailInfo(patchChallengeFailInfoParams); // 챌린지 실패 전환 - 즉시 실패 전환
                     const patchChallengeIntermediateCertificationFailInfoRows_16 = await challengecertificationDao.patchChallengeIntermediateCertificationFailInfo_16(challengeIdx); // 챌린지 중간 인증 실패
 
+                    if (!admin.apps.length) {
+                        admin.initializeApp({
+                            credential: admin.credential.applicationDefault()
+                        });
+                    }
+                    const [userChallengeInfoRows] = await challengecertificationDao.challengeCheck(challengeIdx);
+
+                    const [registrationTokens] = await challengecertificationDao.getDeviceToken(challengeIdx);
+
+                    const [failUserInfoRows] = await challengecertificationDao.getFailUser(observerIdx);
+
+                    if (registrationTokens.length < 1) {
+                        return res.json({
+                            isSuccess: true,
+                            code: 1010,
+                            message: "알림 기능을 켜둔 감시자가 없습니다. 챌린지 중간 상태(사용자입력)-실패 변경 성공",
+                        });
+                    }
+
+                    const message = {
+                        notification: {
+                            title: userChallengeInfoRows[0].challengeDeclarer + ' 님의 챌린지가 실패했습니다.',
+                            body: failUserInfoRows[0].userNickName + " 님이"+"'"+challengeFailText+"'"+"이라는 실패 사유를 작성했습니다."
+                        },
+                        data: { score: '850', time: '2:45' },
+                        tokens: registrationTokens,
+                    }
+
+                    await admin.messaging().sendMulticast(message)
+                        .then((response) => {
+                            // Response is a message ID string.
+                            console.log(response.successCount + ' messages were sent successfully');
+                        })
+                        .catch((error) => {
+                            console.log('Error sending message:', error);
+                            return res.json({
+                                isSuccess: false,
+                                code: 2000,
+                                message: "푸시 알림 전송 실패"
+                            });
+                        });
+
                     return res.json({
                         isSuccess: true,
                         code: 1000,
@@ -469,6 +688,48 @@ exports.patchChallengeCertification = async function (req, res) {
                     const patchChallengeCertificationInfoRows_20 = await challengecertificationDao.patchChallengeCertificationInfo_20(patchChallengeCertificationInfoParams); // 챌린지 인증 상태 변경
                     const patchChallengeFailInfoRows = await challengecertificationDao.patchChallengeFailInfo(patchChallengeFailInfoParams); // 챌린지 실패 전환 - 즉시 실패 전환
                     const patchChallengeIntermediateCertificationFailInfoRows_20 = await challengecertificationDao.patchChallengeIntermediateCertificationFailInfo_20(challengeIdx); // 챌린지 중간 인증 실패
+
+                    if (!admin.apps.length) {
+                        admin.initializeApp({
+                            credential: admin.credential.applicationDefault()
+                        });
+                    }
+                    const [userChallengeInfoRows] = await challengecertificationDao.challengeCheck(challengeIdx);
+
+                    const [registrationTokens] = await challengecertificationDao.getDeviceToken(challengeIdx);
+
+                    const [failUserInfoRows] = await challengecertificationDao.getFailUser(observerIdx);
+
+                    if (registrationTokens.length < 1) {
+                        return res.json({
+                            isSuccess: true,
+                            code: 1010,
+                            message: "알림 기능을 켜둔 감시자가 없습니다. 챌린지 중간 상태(사용자입력)-실패 변경 성공",
+                        });
+                    }
+
+                    const message = {
+                        notification: {
+                            title: userChallengeInfoRows[0].challengeDeclarer + ' 님의 챌린지가 실패했습니다.',
+                            body: failUserInfoRows[0].userNickName + " 님이"+"'"+challengeFailText+"'"+"이라는 실패 사유를 작성했습니다."
+                        },
+                        data: { score: '850', time: '2:45' },
+                        tokens: registrationTokens,
+                    }
+
+                    await admin.messaging().sendMulticast(message)
+                        .then((response) => {
+                            // Response is a message ID string.
+                            console.log(response.successCount + ' messages were sent successfully');
+                        })
+                        .catch((error) => {
+                            console.log('Error sending message:', error);
+                            return res.json({
+                                isSuccess: false,
+                                code: 2000,
+                                message: "푸시 알림 전송 실패"
+                            });
+                        });
 
                     return res.json({
                         isSuccess: true,

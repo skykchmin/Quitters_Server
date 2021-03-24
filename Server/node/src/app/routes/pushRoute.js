@@ -10,4 +10,6 @@ module.exports = function(app){
 
     app.patch('/push/silence-off',jwtMiddleware,push.setSilenceOff);
 
+    app.post('/push/certification',jwtMiddleware,push.postRequest);
+
 };

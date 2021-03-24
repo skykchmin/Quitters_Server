@@ -36,7 +36,7 @@ async function insertUserInfo(nickName,email,profileUrl,loginType,password) {
 async function selectUserInfo(id) {
   const connection = await pool.getConnection(async (conn) => conn);
   const selectUserInfoQuery = `
-                SELECT userIdx, userId, userPassword, userNickName, userStatus ,userLoginMethod
+                SELECT userIdx, userId, userPassword, userNickName,userProfilePicture, userStatus ,userLoginMethod
                 FROM User 
                 WHERE userId = ?;
                 `;

@@ -6,6 +6,24 @@ const challengecertificationDao = require('../dao/challengecertificationDao');
 
 const { constants } = require('buffer');
 
+
+// function getFormatDate(date){
+//     var year = date.getFullYear();
+//     var month = (1 + date.getMonth());
+//     month = month > 10 ? month : '0' + month; // 10이 넘지 않으면 앞에 0을 붙인다
+//     var day = date.getDate();
+//     day = day > 10 ? day : '0' + day; // 10이 넘지 않으면 앞에 0을 붙인다
+//     var hours = date.getHours();
+//     hours = hours > 10 ? hours : '0' + hours; // 10이 넘지 않으면 앞에 0을 붙인다
+//     var minutes = date.getMinutes();
+//     minutes =  minutes > 10 ? minutes : '0' + minutes; // 10이 넘지 않으면 앞에 0을 붙인다
+//     var seconds = date.getSeconds();
+//     seconds = seconds > 10 ? seconds : '0' + seconds; // 10이 넘지 않으면 앞에 0을 붙인다
+
+//     // return year + '-' + month + '-' + day;
+//     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds} `
+// }
+
 // 종료 날짜에 따른 챌린지 성공 전환
 exports.updateChallengeSuccess = async function (req, res) {
     
@@ -96,7 +114,6 @@ exports.patchAutoChallengeIntermediateCertification = async function (req, res) 
     var date = new Date();
     var hours = date.getHours();
 
-
     const connection = await pool.getConnection(); // 트랜잭션 정의
     
     if(hours >= 0 && hours < 4){
@@ -182,7 +199,6 @@ exports.patchAutoChallengeIntermediateCertification = async function (req, res) 
     }
     else if(hours >= 12 && hours < 16){
         try {
-            
             await connection.beginTransaction(); // 트랜잭션 시작
 
             const getChallengeStatusInfoRows = await certificationschedulerDao.getChallengeStatusInfo(); // 챌린지 진행여부 조회 

@@ -235,6 +235,19 @@ async function challengeDuplicateCheckInfo(userIdx) {
   return challengeDuplicateCheckInfoRows;
 }
 
+// 챌린지 중간 인증 생성 - 챌린지 생성하자마자
+async function insertChallengeIntermediateCertificationInfo() {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const insertChallengeIntermediateCertificationInfoQuery = `
+  insert into challengeintermediatecertification(challengeIdx, ChallengeIntermediateCertificationStatus, createdAt)
+  values (last_insert_id(), 0, now())
+  `;
+  const insertChallengeIntermediateCertificationInfoRows = await connection.query(
+    insertChallengeIntermediateCertificationInfoQuery
+  );
+  connection.release();
+  return insertChallengeIntermediateCertificationInfoRows;
+}
 
 module.exports = {
     insertChallengeInfo,
@@ -249,5 +262,6 @@ module.exports = {
     getChallengeFailMessageInfo,
     getMyChallengeListInfo,
     getFriendChallengeListInfo,
-    challengeDuplicateCheckInfo
+    challengeDuplicateCheckInfo,
+    insertChallengeIntermediateCertificationInfo
 };

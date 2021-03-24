@@ -164,6 +164,7 @@ exports.insertChallenge = async function (req, res) {
 
             const insertChallengeInfoParams = [userIdx, challengeStartDate, challengeEndDate, smokingAmount, cigarattePrice, challengeDeclarer, challengeText, challengeCode, challengeCreateTime, challengeUpdateTime];
             const insertChallengeInfoRows = await challengeDao.insertChallengeInfo(insertChallengeInfoParams);
+            const insertChallengeIntermediateCertificationInfoRows = await challengeDao.insertChallengeIntermediateCertificationInfo();
 
             await connection.commit();
             return res.json({

@@ -111,14 +111,16 @@ exports.updateIntermediateCertification = async function (req, res) {
 exports.patchAutoChallengeIntermediateCertification = async function (req, res) {
     // const { id } = req.verifiedToken;
 
-    var date = new Date();
-    var hours = date.getHours();
+    // var date = new Date();
+    // var hours = date.getHours();
 
     const connection = await pool.getConnection(); // 트랜잭션 정의
-    
+
+    var getHoursInfoRows = await certificationschedulerDao.getHoursInfo();
+    var hours = getHoursInfoRows[0].hour
+
     if(hours >= 0 && hours < 4){
         try {
-            
             await connection.beginTransaction(); // 트랜잭션 시작
 
             const getChallengeStatusInfoRows = await certificationschedulerDao.getChallengeStatusInfo(); // 챌린지 진행여부 조회 

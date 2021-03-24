@@ -51,6 +51,21 @@ async function getChallengeStatusInfo(getChallengeStatusInfoParams) {
   return getChallengeStatusInfoInfoRows;
 }
 
+// 현재 시간 뽑아내기
+async function getHoursInfo() {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const getHoursInfoQuery = `
+  select hour(current_timestamp) as hour;
+  `;
+  
+  const [getHoursInfoRows] = await connection.query(
+    getHoursInfoQuery,
+  );
+  connection.release();
+  return getHoursInfoRows;
+}
+
+
 // 챌린지 중간 인증 업데이트 실행
 async function updateChallengeIntermediateCertificationInfo(updateChallengeIntermediateCertificationInfoParams) {
   const connection = await pool.getConnection(async (conn) => conn);
@@ -128,5 +143,6 @@ async function updateChallengeSuccessInfo(updateChallengeSuccessInfoParams) {
       getChallengeStatusInfo,
       updateChallengeIntermediateCertificationInfo,
       patchAutoChallengeIntermediateCertificationInfo,
-      updateChallengeSuccessInfo
+      updateChallengeSuccessInfo,
+      getHoursInfo
   };

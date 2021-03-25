@@ -469,7 +469,9 @@ exports.changePasswordInfo = async function (req, res) {
             const [userInfoRows] = await userDao.getUserInfo(id);
 
            return res.json({
-                userInfo : userInfoRows[0],
+                userIdx : userInfoRows[0].userIdx,
+                userProfileUrl : userInfoRows[0].userProfilePicture,
+                userNickName : userInfoRows[0].userNickName,
                 isSuccess: true,
                 code: 1000,
                 message: "회원 정보 조회 성공!"

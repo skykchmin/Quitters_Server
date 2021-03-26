@@ -73,12 +73,27 @@ async function patchStopDeclarerObserverInfo(patchStopDeclarerObserverInfoParams
   return patchStopDeclarerObserverInfoRows;
 }
 
-
-
+// 감시자 중복 체크 방지 - 21.03.26
+async function getObserverDuplicateCheckInfo(getObserverDuplicateCheckInfoParams) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const getObserverDuplicateCheckInfoQuery = `
+  select challengeIdx, ObserverIdx, ObserverStatus
+  from declarerobserver
+  where challengeIdx = ? and ObserverIdx = ? and ObserverStatus = 'F'
+  `;
+  
+  const [getObserverDuplicateCheckInfoRows] = await connection.query(
+    getObserverDuplicateCheckInfoQuery,
+    getObserverDuplicateCheckInfoParams
+  );
+  connection.release();
+  return getObserverDuplicateCheckInfoRows;
+}
 
 module.exports = {
     insertDeclarerObserverInfo,
     patchDeclarerObserverInfo,
     challengeParticipationCheckNumber,
-    patchStopDeclarerObserverInfo
+    patchStopDeclarerObserverInfo,
+    getObserverDuplicateCheckInfo
 };

@@ -55,7 +55,19 @@ exports.insertChallengeParticipation = async function (req, res) {
                     message: "감시자는 8명 이상 추가할 수 없습니다"
                 });
             }
+            // 추가된 부분 - 21.03.26 챌린지 중복 참여 방지
+            const getObserverDuplicateCheckInfoParams = [challengeIdx, observerIdx];
+            const getObserverDuplicateCheckInfoRows = await declarerobserverDao.getObserverDuplicateCheckInfo(getObserverDuplicateCheckInfoParams);
             
+            if (getObserverDuplicateCheckInfoRows.length > 0){
+                return res.json({
+                    isSuccess: false,
+                    code: 2563,
+                    message: "이미 챌린지에 참여하고 있습니다"
+                });
+            }
+            //
+
             const insertDeclarerObserverInfoParams = [challengeIdx, observerIdx];
             const insertDeclarerObserverInfoRows = await declarerobserverDao.insertDeclarerObserverInfo(insertDeclarerObserverInfoParams);
 

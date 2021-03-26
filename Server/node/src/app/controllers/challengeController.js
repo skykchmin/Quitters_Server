@@ -163,8 +163,8 @@ exports.insertChallenge = async function (req, res) {
             // }
 
             const insertChallengeInfoParams = [userIdx, challengeStartDate, challengeEndDate, smokingAmount, cigarattePrice, challengeDeclarer, challengeText, challengeCode, challengeCreateTime, challengeUpdateTime];
-            const insertChallengeInfoRows = await challengeDao.insertChallengeInfo(insertChallengeInfoParams);
-            const insertChallengeIntermediateCertificationInfoRows = await challengeDao.insertChallengeIntermediateCertificationInfo();
+            const insertChallengeInfoRows = await challengeDao.insertChallengeInfo(insertChallengeInfoParams); // 챌린지 정보 생성
+            const insertChallengeIntermediateCertificationInfoRows = await challengeDao.insertChallengeIntermediateCertificationInfo(); // 챌린지 중간 테이블 생성
 
             await connection.commit();
             return res.json({

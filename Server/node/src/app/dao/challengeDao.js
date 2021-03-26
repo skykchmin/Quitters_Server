@@ -125,7 +125,7 @@ async function getFriendsChallengeInfo(observerIdx) {
 async function getChallengeDetailInfo(challengeIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getChallengeDetailInfoQuery = `
-  select challengeDeclarer, challengeText, smokingAmount, cigarattePrice, savingMoney, noSmokingTime, challengeStartDate, challengeEndDate, challengeCode
+  select challengeDeclarer, challengeText, smokingAmount, cigarattePrice, savingMoney, noSmokingTime, challengeStartDate, challengeEndDate, challengeCode, userIdx
   from challenge
   where challengeIdx = ?;
   `;

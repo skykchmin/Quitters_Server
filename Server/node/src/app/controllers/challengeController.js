@@ -151,16 +151,16 @@ exports.insertChallenge = async function (req, res) {
                 return true;
             }
 
-            // 챌린지 1개 이상 - 리암님 요청
-            // const challengeDuplicateCheckInfoRows = await challengeDao.challengeDuplicateCheckInfo(userIdx);
-            // console.log(challengeDuplicateCheckInfoRows[0].length);
-            // if(challengeDuplicateCheckInfoRows[0].length > 0){
-            //     return res.json({
-            //         isSuccess: false, 
-            //         code: 2511, 
-            //         message: "나의 챌린지는 한 개 이상 등록할 수 없습니다"
-            //     });
-            // }
+            // 챌린지 중복 방지
+            const challengeDuplicateCheckInfoRows = await challengeDao.challengeDuplicateCheckInfo(userIdx);
+            console.log(challengeDuplicateCheckInfoRows[0].length);
+            if(challengeDuplicateCheckInfoRows[0].length > 0){
+                return res.json({
+                    isSuccess: false, 
+                    code: 2511, 
+                    message: "나의 챌린지는 한 개 이상 등록할 수 없습니다"
+                });
+            }
 
             const insertChallengeInfoParams = [userIdx, challengeStartDate, challengeEndDate, smokingAmount, cigarattePrice, challengeDeclarer, challengeText, challengeCode, challengeCreateTime, challengeUpdateTime];
             const insertChallengeInfoRows = await challengeDao.insertChallengeInfo(insertChallengeInfoParams); // 챌린지 정보 생성

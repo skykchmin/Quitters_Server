@@ -262,13 +262,13 @@ exports.changeProfile = async function (req, res) {
         code: 2021,
         message: "닉네임은 1자리 이상 10자리 미만으로 입력해주세요."
     });
-
+/*
     if (checkSpace(nickName)) 
     return res.json({isSuccess: false, code: 2025, message: "닉네임에 공백을 제거해주세요"});
 
     if (checkSpecial(nickName)) 
     return res.json({isSuccess: false, code: 2026, message: "닉네임에 특수문자는 들어갈 수 없습니다."});
-
+*/
         try {
             if(profileUrl == "undefined" || profileUrl == null || profileUrl == ""){
                 const [userInfo] = await userDao.checkProfile(id);

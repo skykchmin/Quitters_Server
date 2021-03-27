@@ -143,7 +143,7 @@ exports.signUp = async function (req, res) {
             return res.json({
                 isSuccess: false,
                 code: 2000,
-                message: "회원가입 실패!",
+                message: "회원가입 실패",
             });
         }
 };
@@ -241,7 +241,7 @@ exports.signIn = async function (req, res) {
             return res.json({
                 isSuccess: false,
                 code: 2000,
-                message: "로그인 실패!",
+                message: "로그인 실패",
             });
         }
 };
@@ -279,14 +279,14 @@ exports.changeProfile = async function (req, res) {
            return res.json({
                 isSuccess: true,
                 code: 1000,
-                message: "프로필 정보 수정 성공!"
+                message: "프로필 정보 수정 성공"
             });
 
         } catch (err) {
             return res.json({
                 isSuccess: false,
                 code: 2000,
-                message: "프로필 정보 수정 실패!",
+                message: "프로필 정보 수정 실패",
             });
         }
 };
@@ -346,14 +346,14 @@ exports.changeId = async function (req, res) {
            return res.json({
                 isSuccess: true,
                 code: 1000,
-                message: "아이디 변경 성공!"
+                message: "아이디 변경 성공"
             });
 
         } catch (err) {
             return res.json({
                 isSuccess: false,
                 code: 2000,
-                message: "아이디 변경 실패!",
+                message: "아이디 변경 실패",
             });
         }
 };
@@ -421,14 +421,14 @@ exports.changePasswordInfo = async function (req, res) {
            return res.json({
                 isSuccess: true,
                 code: 1000,
-                message: "비밀번호 변경 성공!"
+                message: "비밀번호 변경 성공"
             });
 
         } catch (err) {
             return res.json({
                 isSuccess: false,
                 code: 2000,
-                message: "비밀번호 변경 실패!",
+                message: "비밀번호 변경 실패",
             });
         }
 };
@@ -447,14 +447,14 @@ exports.changePasswordInfo = async function (req, res) {
            return res.json({
                 isSuccess: true,
                 code: 1000,
-                message: "회원 탈퇴 성공!"
+                message: "회원 탈퇴 성공"
             });
 
         } catch (err) {
             return res.json({
                 isSuccess: false,
                 code: 2000,
-                message: "회원 탈퇴 실패!",
+                message: "회원 탈퇴 실패",
             });
         }
 };
@@ -476,14 +476,14 @@ exports.changePasswordInfo = async function (req, res) {
                 userNickName : userInfoRows[0].userNickName,
                 isSuccess: true,
                 code: 1000,
-                message: "회원 정보 조회 성공!"
+                message: "회원 정보 조회 성공"
             });
 
         } catch (err) {
             return res.json({
                 isSuccess: false,
                 code: 2000,
-                message: "회원 정보 조회 실패!",
+                message: "회원 정보 조회 실패",
             });
         }
 };
@@ -505,7 +505,7 @@ exports.changePasswordInfo = async function (req, res) {
                     silenceInfo : userSilenceInfoRows[0],
                     isSuccess: true,
                     code: 1000,
-                    message: "회원 푸시 알림 정보 조회 성공!"
+                    message: "회원 푸시 알림 정보 조회 성공"
                 });
             }
 
@@ -513,14 +513,14 @@ exports.changePasswordInfo = async function (req, res) {
                 userInfo : userPushInfoRows[0],
                 isSuccess: true,
                 code: 1000,
-                message: "회원 푸시 알림 정보 조회 성공!"
+                message: "회원 푸시 알림 정보 조회 성공"
             });
 
         } catch (err) {
             return res.json({
                 isSuccess: false,
                 code: 2000,
-                message: "회원 푸시 알림 정보 조회 실패!",
+                message: "회원 푸시 알림 정보 조회 실패",
             });
         }
 };
@@ -541,14 +541,14 @@ exports.setDeviceToken = async function (req, res) {
            return res.json({
                 isSuccess: true,
                 code: 1000,
-                message: "회원 디바이스 토큰 갱신 성공!"
+                message: "회원 디바이스 토큰 갱신 성공"
             });
 
         } catch (err) {
             return res.json({
                 isSuccess: false,
                 code: 2000,
-                message: "회원 디바이스 토큰 갱신 실패!",
+                message: "회원 디바이스 토큰 갱신 실패",
             });
         }
 };

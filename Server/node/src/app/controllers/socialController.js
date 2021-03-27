@@ -218,7 +218,7 @@ exports.getKakao = async function (req, res) {
              return res.json({
               isSuccess: false,
               code: 3203,
-              message: "카카오 토큰이 유효하지 않습니다!"
+              message: "카카오 토큰이 유효하지 않습니다"
           });
            }
          }
@@ -254,7 +254,7 @@ await admin
     return res.json({
         isSuccess: false,
         code: 3250,
-        message: "구글 토큰이 유효하지 않습니다!"
+        message: "구글 토큰이 유효하지 않습니다"
   });
 
 

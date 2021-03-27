@@ -227,8 +227,10 @@ exports.signIn = async function (req, res) {
             );
 
            return res.json({
-                userInfo: {userIdx : userInfoRows[0].userIdx,
-                            userNickName : userInfoRows[0].userNickName},
+            newUser : true,
+            userIdx : userInfoRows[0].userIdx,
+            userNickName : userInfoRows[0].userNickName,
+            userProfileUrl : userInfoRows[0].userProfilePicture,
                 jwt: token,
                 isSuccess: true,
                 code: 1000,

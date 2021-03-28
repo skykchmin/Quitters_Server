@@ -247,14 +247,14 @@ exports.patchChallenge = async function (req, res) {
     
     var date = getFormatDate(new Date()); // 오늘 날짜 지정
 
-    // 시작일이 오늘 날짜보다 과거일 경우
-    if (challengeStartDate < date){
-        return res.json({
-            isSuccess: false, 
-            code: 2527, 
-            message: "유효한 시작일을 선택해주세요"
-        });
-    } 
+    // // 시작일이 오늘 날짜보다 과거일 경우
+    // if (challengeStartDate < date){
+    //     return res.json({
+    //         isSuccess: false, 
+    //         code: 2527, 
+    //         message: "유효한 시작일을 선택해주세요"
+    //     });
+    // } 
 
     // 종료일이 오늘 날짜보다 과거일 경우
     if (challengeEndDate < date){

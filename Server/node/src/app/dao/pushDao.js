@@ -289,8 +289,12 @@ WHERE challengeIdx = ${challengeId} AND user.userPushStatus = 'Y' AND NOT user.u
   const [getDeviceTokenRows] = await connection.query(
     getDeviceTokenQuery
   );
+  let deviceTokenRows = new Array();
+  for(var i =0; i<getDeviceTokenRows.length; i++){
+    deviceTokenRows[i] = getDeviceTokenRows[i].userDeviceToken;
+  }
   connection.release();
-  return [getDeviceTokenRows];
+  return deviceTokenRows
 }
 
 

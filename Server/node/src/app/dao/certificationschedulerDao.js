@@ -125,9 +125,13 @@ WHERE challengeEndDate = curdate() and challengeStatus ='1';
     const [getTokenRows] = await connection.query(
       getTokenQuery
     );
+    let deviceTokenRows = new Array();
+  for(var i =0; i<getTokenRows.length; i++){
+    deviceTokenRows[i] = getTokenRows[i].userDeviceToken;
+  }
     await connection.commit(); // COMMIT
     connection.release();
-    return getTokenRows;
+    return deviceTokenRows;
     
   }catch(err){
              await connection.rollback(); // ROLLBACK

@@ -232,8 +232,8 @@ exports.postRequest = async function (req, res) {
         });
     }
 
-    const [registrationTokens] = await pushDao.getDeviceToken(challengeId);
-
+    const registrationTokens = await pushDao.getDeviceToken(challengeId);
+    
     if (registrationTokens.length < 1) {
         return res.json({
             isSuccess: false,
@@ -248,7 +248,7 @@ exports.postRequest = async function (req, res) {
             body: userChallengeInfoRows[0].challengeDeclarer + ' 님이 챌린지 인증을 요청하였습니다.'
         },
         data: { score: '850', time: '2:45' },
-        tokens: registrationTokens,
+        tokens: registrationTokens
     }
 
     await admin.messaging().sendMulticast(message)

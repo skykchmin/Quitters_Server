@@ -98,10 +98,14 @@ async function patchAutoChallengeIntermediateCertificationInfo(patchAutoChalleng
   return patchAutoChallengeIntermediateCertificationInfoRows;
 }
 
-// 챌린지 종료날짜에 따른 성공 전환 
+// 챌린지 종료날짜에 따른 성공 전환 (디바이스 토큰을 얻기위해 트랜잭션 추가)
 async function updateChallengeSuccessInfo(updateChallengeSuccessInfoParams) {
+  try{
   const connection = await pool.getConnection(async (conn) => conn);
-  const updateChallengeSuccessInfoQuery = `
+  try{
+    await connection.beginTransaction(); // START TRANSACTION
+
+    const updateChallengeSuccessInfoQuery = `
   update challenge
   set challengeStatus = '1'
   where challengeEndDate = curdate() and challengeStatus = '0'
@@ -111,8 +115,31 @@ async function updateChallengeSuccessInfo(updateChallengeSuccessInfoParams) {
     updateChallengeSuccessInfoQuery,
     updateChallengeSuccessInfoParams
   );
-  connection.release();
-  return updateChallengeSuccessInfoRows;
+    // 토큰 얻는 쿼리
+      const getTokenQuery =`
+      SELECT user.userDeviceToken FROM challenge
+JOIN user ON user.userIdx = challenge.userIdx
+WHERE challengeEndDate = curdate() and challengeStatus ='1';
+    `;
+    
+    const [getTokenRows] = await connection.query(
+      getTokenQuery
+    );
+    await connection.commit(); // COMMIT
+    connection.release();
+    return getTokenRows;
+    
+  }catch(err){
+             await connection.rollback(); // ROLLBACK
+            connection.release();
+            logger.error(`update Success Challenge Query error\n: ${JSON.stringify(err)}`);
+            return false;
+  }
+}catch(err){
+    logger.error(`update Success Challenge DB Connection error\n: ${JSON.stringify(err)}`);
+    connection.release();
+    return false;
+}
 }
 
 

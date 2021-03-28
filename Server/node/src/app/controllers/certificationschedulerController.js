@@ -6,6 +6,16 @@ const challengecertificationDao = require('../dao/challengecertificationDao');
 
 const { constants } = require('buffer');
 
+const config = {
+    apiKey: "AIzaSyAMuxxEj8mcAVMz-O7p_HNST6ebTbNf3co",
+    authDomain: "nosmoking-dev.firebaseapp.com",
+    appId: "1:263372481580:android:ac7d61d57585bce312dd89",
+    messagingSenderId: "263372481580"
+};
+
+
+const admin = require('firebase-admin');
+
 
 // function getFormatDate(date){
 //     var year = date.getFullYear();
@@ -28,7 +38,37 @@ const { constants } = require('buffer');
 exports.updateChallengeSuccess = async function (req, res) {
     
     try {
-        const updateChallengeSuccessInfoRows = await certificationschedulerDao.updateChallengeSuccessInfo(); // 챌린지 진행여부 조회
+        if (!admin.apps.length) {
+            admin.initializeApp({
+                credential: admin.credential.applicationDefault()
+            });
+        }
+
+        const [updateChallengeSuccessInfoRows] = await certificationschedulerDao.updateChallengeSuccessInfo(); // 챌린지 진행여부 조회
+
+        if(updateChallengeSuccessInfoRows.length<1){
+            return true;
+        }
+
+        const message = {
+            notification: {
+                title: '금연 챌린지에 성공하셨습니다!',
+                body: '축하합니다. Quitters 금연 챌린지에 성공하셨습니다.'
+            },
+            data: { score: '850', time: '2:45' },
+            tokens: updateChallengeSuccessInfoRows,
+        }
+    
+        await admin.messaging().sendMulticast(message)
+            .then((response) => {
+                // Response is a message ID string.
+                console.log(response.successCount + ' messages were sent successfully');
+            })
+            .catch((error) => {
+                console.log('Error sending message:', error);
+                return true;
+            });
+
 
         console.log("챌린지 종료일에 따른 챌린지 성공 전환 성공!");
         return true;     

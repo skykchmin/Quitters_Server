@@ -88,7 +88,7 @@ async function challengeParticipationCodeCheck(challengeCode) {
 async function getMyChallengeInfo(userIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getMyChallengeInfoInfoQuery = `
-  select challengeIdx, challengeDeclarer, u.userProfilePicture ,challengeStartDate, challengeEndDate, challengeText, challengeCreateTime
+  select challengeIdx, challengeDeclarer, u.userProfilePicture ,challengeStartDate, challengeEndDate, challengeText, challengeCode, challengeCreateTime
   from challenge
   inner join user u on challenge.userIdx = u.userIdx
   where challenge.userIdx = ? and challengeStatus = '0';

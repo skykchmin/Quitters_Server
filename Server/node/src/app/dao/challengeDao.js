@@ -94,7 +94,7 @@ async function getMyChallengeInfo(userIdx) {
   where challenge.userIdx = ? and challengeStatus = '0';
   `;
   const getMyChallengeInfoInfoParams = [userIdx]
-  const getMyChallengeInfoInfoRows = await connection.query(
+  const [getMyChallengeInfoInfoRows] = await connection.query(
     getMyChallengeInfoInfoQuery,
     getMyChallengeInfoInfoParams
   );

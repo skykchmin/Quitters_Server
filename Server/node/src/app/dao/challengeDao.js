@@ -37,8 +37,8 @@ async function patchChallengeInfo(patchChallengeInfoParams) {
   const connection = await pool.getConnection(async (conn) => conn);
   const patchChallengeInfoQuery = `
   update challenge
-  set challengeStartDate = ? , challengeEndDate = ?, smokingAmount = ?, cigarattePrice = ?, challengeDeclarer = ?, challengeText = ?, challengeUpdateTime = now()
-  where challengeIdx = ?
+  set challengeStartDate = ? , challengeEndDate = ?, smokingAmount = ?, cigarattePrice = ?, noSmokingTime = 0, savingMoney = 0, challengeCreateTime = now(), challengeDeclarer = ?, challengeText = ?, challengeUpdateTime = now()
+  where challengeIdx = ?;
   `;
   
   const patchChallengeInfoRows = await connection.query(

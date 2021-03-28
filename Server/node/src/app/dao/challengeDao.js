@@ -200,7 +200,7 @@ async function getMyChallengeListInfo(userIdx) {
 async function getFriendChallengeListInfo(observerIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getFriendChallengeListInfoQuery = `
-  select challengeIdx, challengeDeclarer, challengeStartDate, challengeEndDate, challengeText, challengeStatus, d.challengeIdx, u.userProfilePicture, challengeUpdateTime
+  select challenge.challengeIdx, challengeDeclarer, challengeStartDate, challengeEndDate, challengeText, challengeStatus, d.challengeIdx, u.userProfilePicture, challengeUpdateTime
   from challenge
   inner join declarerobserver d on challenge.challengeIdx = d.challengeIdx
   inner join user u on challenge.userIdx = u.userIdx

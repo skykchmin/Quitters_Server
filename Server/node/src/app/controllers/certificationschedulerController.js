@@ -44,7 +44,7 @@ exports.updateChallengeSuccess = async function (req, res) {
             });
         }
 
-        const [updateChallengeSuccessInfoRows] = await certificationschedulerDao.updateChallengeSuccessInfo(); // 챌린지 진행여부 조회
+        const updateChallengeSuccessInfoRows = await certificationschedulerDao.updateChallengeSuccessInfo(); // 챌린지 진행여부 조회
 
         if(updateChallengeSuccessInfoRows.length<1){
             return true;

@@ -13,7 +13,7 @@ exports.insertChallengeParticipation = async function (req, res) {
     const {
         challengeCode
     } = req.body;
-
+    console.log(challengeCode);
     const connection = await pool.getConnection(); // 트랜잭션 시작
 
     // if (checkString(challengeDeclarer) == false){
@@ -31,10 +31,17 @@ exports.insertChallengeParticipation = async function (req, res) {
         try {
             
             await connection.beginTransaction();
-
+            
             const challengeParticipationCodeRows = await challengeDao.challengeParticipationCodeCheck(challengeCode); // 챌린지 참여코드 확인
-            console.log(challengeParticipationCodeRows[0].challengeCode) // 챌린지 참여 코드
-
+            
+            if(challengeParticipationCodeRows.length < 1){
+                return res.json({
+                    isSuccess: false,
+                    code: 2561,
+                    message: "챌린지 번호를 다시 입력해주세요"
+                });
+            }
+            
             //챌린지 코드 확인
             if(challengeCode != challengeParticipationCodeRows[0].challengeCode){
                 return res.json({

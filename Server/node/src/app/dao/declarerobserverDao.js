@@ -90,10 +90,29 @@ async function getObserverDuplicateCheckInfo(getObserverDuplicateCheckInfoParams
   return getObserverDuplicateCheckInfoRows;
 }
 
+// 챌린지가 자기자신인지
+async function getChallengeMyselfCheckInfo(getChallengeMyselfCheckInfoParams) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const getChallengeMyselfCheckInfoQuery = `
+  select userIdx
+  from challenge
+  where challengeCode = ?
+  `;
+  
+  const [getChallengeMyselfCheckInfoRows] = await connection.query(
+    getChallengeMyselfCheckInfoQuery,
+    getChallengeMyselfCheckInfoParams
+  );
+  connection.release();
+  return getChallengeMyselfCheckInfoRows;
+}
+
+
 module.exports = {
     insertDeclarerObserverInfo,
     patchDeclarerObserverInfo,
     challengeParticipationCheckNumber,
     patchStopDeclarerObserverInfo,
-    getObserverDuplicateCheckInfo
+    getObserverDuplicateCheckInfo,
+    getChallengeMyselfCheckInfo
 };

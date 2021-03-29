@@ -13,7 +13,7 @@ exports.insertChallengeParticipation = async function (req, res) {
     const {
         challengeCode
     } = req.body;
-    console.log(challengeCode);
+
     const connection = await pool.getConnection(); // 트랜잭션 시작
 
     // if (checkString(challengeDeclarer) == false){
@@ -51,6 +51,21 @@ exports.insertChallengeParticipation = async function (req, res) {
                 });
             }
 
+            // 챌린지 참여 코드 인원이 자신의 챌린지일 경우
+            const getChallengeMyselfCheckInfoParams = [challengeCode];
+            const getChallengeMyselfCheckInfoRows = await declarerobserverDao.getChallengeMyselfCheckInfo(getChallengeMyselfCheckInfoParams);
+
+            console.log(getChallengeMyselfCheckInfoRows[0]);
+            console.log(observerIdx);
+            if (getChallengeMyselfCheckInfoRows[0].userIdx == observerIdx){
+                return res.json({
+                    isSuccess: false,
+                    code: 2564,
+                    message: "챌린지가 자신의 챌린지 입니다"
+                });
+            }
+            //
+
             const challengeIdx = challengeParticipationCodeRows[0].challengeIdx // 초대코드에 맞는 챌린지 번호 뽑아내기
 
             const challengeParticipationCheckNumberRows = await declarerobserverDao.challengeParticipationCheckNumber(challengeIdx); // 챌린지 참여인원 확인
@@ -73,7 +88,7 @@ exports.insertChallengeParticipation = async function (req, res) {
                     message: "이미 챌린지에 참여하고 있습니다"
                 });
             }
-            //
+            
 
             const insertDeclarerObserverInfoParams = [challengeIdx, observerIdx];
             const insertDeclarerObserverInfoRows = await declarerobserverDao.insertDeclarerObserverInfo(insertDeclarerObserverInfoParams);

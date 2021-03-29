@@ -39,7 +39,7 @@ async function insertUserInfo(insertUserInfoParams) {
   const connection = await pool.getConnection(async (conn) => conn); // connection을 진행해주고
   const insertUserInfoQuery = `
   INSERT INTO User(userId,userPassword,userNickName,userLoginMethod,userProfilePicture) 
-  VALUES (?,?,?,0,'default');
+  VALUES (?,?,?,0,'https://firebasestorage.googleapis.com/v0/b/nosmoking-dev.appspot.com/o/media%2FImage_20210329_131632_.jpg?alt=media&token=44e8f4f2-6e66-47a3-99fc-45c67e71f059');
     `;
     // 위의 쿼리를 실행해준다면 insertUserInfoParams 로 넘어온 정보를 ? 쪽에 들어가게 됩니다. 
   const insertUserInfoRow = await connection.query(

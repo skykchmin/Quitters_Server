@@ -110,7 +110,7 @@ async function getFriendsChallengeInfo(observerIdx) {
   from challenge
   inner join declarerobserver d on challenge.challengeIdx = d.challengeIdx
   inner join user u on challenge.userIdx = u.userIdx
-  where ObserverIdx = ? and challengeStatus = '0';
+  where ObserverIdx = ? and challengeStatus = '0' and ObserverStatus = 'F';
   `;
   const getFriendsChallengeInfoInfoParams = [observerIdx]
   const getFriendsChallengeInfoInfoRows = await connection.query(

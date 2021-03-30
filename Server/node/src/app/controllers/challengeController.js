@@ -164,7 +164,10 @@ exports.insertChallenge = async function (req, res) {
 
             const insertChallengeInfoParams = [userIdx, challengeStartDate, challengeEndDate, smokingAmount, cigarattePrice, challengeDeclarer, challengeText, challengeCode, challengeCreateTime, challengeUpdateTime];
             const insertChallengeInfoRows = await challengeDao.insertChallengeInfo(insertChallengeInfoParams); // 챌린지 정보 생성
-            const insertChallengeIntermediateCertificationInfoRows = await challengeDao.insertChallengeIntermediateCertificationInfo(); // 챌린지 중간 테이블 생성 /
+            const getChallengeIdxInfoRows = await challengeDao.getChallengeIdxInfo(userIdx); // 챌린지 번호뽑아내기
+            // console.log(getChallengeIdxInfoRows[0].challengeIdx);
+            let pickChallengeIdx = getChallengeIdxInfoRows[0].challengeIdx;
+            const insertChallengeIntermediateCertificationInfoRows = await challengeDao.insertChallengeIntermediateCertificationInfo(pickChallengeIdx); // 챌린지 중간 테이블 생성 /
 
             await connection.commit();
             return res.json({

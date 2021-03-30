@@ -16,21 +16,7 @@ async function insertChallengeCertificationInfo(insertChallengeCertificationInfo
     return insertChallengeCertificationInfoRows;
   }
 
-  // 챌린지 중간 인증 생성 - 챌린지 생성하자마자
-async function insertChallengeIntermediateCertificationInfo(challengeIdx) {
-  const connection = await pool.getConnection(async (conn) => conn);
-  const insertChallengeIntermediateCertificationInfoQuery = `
-  insert into challengeintermediatecertification(challengeIdx, ChallengeIntermediateCertificationStatus, createdAt)
-  values (?, 0, now())
-  `;
-  const insertChallengeIntermediateCertificationInfoParams = [challengeIdx];
-  const insertChallengeIntermediateCertificationInfoRows = await connection.query(
-    insertChallengeIntermediateCertificationInfoQuery,
-    insertChallengeIntermediateCertificationInfoParams
-  );
-  connection.release();
-  return insertChallengeIntermediateCertificationInfoRows;
-}
+
 
 // 선언자 - 감시자에서 챌린지 번호, 감시자 번호 뽑아내기 
 async function getChallengeDeclarerObserverInfo(getChallengeDeclarerObserverInfoParams) {
@@ -739,7 +725,6 @@ async function getFailUser(userId) {
 
 module.exports = {
     insertChallengeCertificationInfo,
-    insertChallengeIntermediateCertificationInfo,
 
     getChallengeDeclarerObserverInfo,
     updateChallengeCertificationInfo,

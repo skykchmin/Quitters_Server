@@ -90,6 +90,23 @@ async function getObserverDuplicateCheckInfo(getObserverDuplicateCheckInfoParams
   return getObserverDuplicateCheckInfoRows;
 }
 
+async function getWithDrawDuplicateCheckInfo(getWithDrawDuplicateCheckInfoParams) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const getWithDrawDuplicateCheckInfoQuery = `
+  select challengeIdx, ObserverIdx, ObserverStatus
+  from declarerobserver
+  where challengeIdx = ? and ObserverIdx = ? and ObserverStatus = 'N'
+  `;
+  
+  const [getWithDrawDuplicateCheckInfoRows] = await connection.query(
+    getWithDrawDuplicateCheckInfoQuery,
+    getWithDrawDuplicateCheckInfoParams
+  );
+  connection.release();
+  return getWithDrawDuplicateCheckInfoRows;
+}
+
+
 // 챌린지가 자기자신인지
 async function getChallengeMyselfCheckInfo(getChallengeMyselfCheckInfoParams) {
   const connection = await pool.getConnection(async (conn) => conn);
@@ -114,5 +131,6 @@ module.exports = {
     challengeParticipationCheckNumber,
     patchStopDeclarerObserverInfo,
     getObserverDuplicateCheckInfo,
-    getChallengeMyselfCheckInfo
+    getChallengeMyselfCheckInfo,
+    getWithDrawDuplicateCheckInfo
 };

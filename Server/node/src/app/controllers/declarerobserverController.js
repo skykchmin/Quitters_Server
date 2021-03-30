@@ -89,6 +89,17 @@ exports.insertChallengeParticipation = async function (req, res) {
                 });
             }
             
+            // 추가
+            const getWithDrawDuplicateCheckInfoParams = [challengeIdx, observerIdx];
+            const getWithDrawDuplicateCheckInfoRows = await declarerobserverDao.getWithDrawDuplicateCheckInfo(getWithDrawDuplicateCheckInfoParams);
+            
+            if (getWithDrawDuplicateCheckInfoRows.length > 0){
+                return res.json({
+                    isSuccess: false,
+                    code: 2564,
+                    message: "추방되거나 나간 챌린지에는 재참가할수 없습니다."
+                });
+            }
 
             const insertDeclarerObserverInfoParams = [challengeIdx, observerIdx];
             const insertDeclarerObserverInfoRows = await declarerobserverDao.insertDeclarerObserverInfo(insertDeclarerObserverInfoParams);

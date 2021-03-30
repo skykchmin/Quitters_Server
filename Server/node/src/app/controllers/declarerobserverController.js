@@ -95,7 +95,7 @@ exports.insertChallengeParticipation = async function (req, res) {
 
             const insertChallengeCertificationInfoParams = [challengeIdx, observerIdx];
             const insertChallengeCertificationInfoRows = await challengecertificationDao.insertChallengeCertificationInfo(insertChallengeCertificationInfoParams);
-            const insertChallengeIntermediateCertificationInfoRows = await challengecertificationDao.insertChallengeIntermediateCertificationInfo(); // 챌린지 중간 테이블 생성
+            const insertChallengeIntermediateCertificationInfoRows = await challengecertificationDao.insertChallengeIntermediateCertificationInfo(challengeIdx); // 챌린지 중간 테이블 생성
 
             await connection.commit();
 

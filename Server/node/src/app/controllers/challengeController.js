@@ -141,7 +141,7 @@ exports.insertChallenge = async function (req, res) {
             await connection.beginTransaction(); // 트랜잭션 시작
 
             var challengeCode = makeRandomChallengeCode()
-            console.log(challengeCode)
+            // console.log(challengeCode)
             const challengeCodeRows = await challengeDao.challengeCodeCheck(challengeCode);
             
             //중복이 있다면 재할당
@@ -153,7 +153,7 @@ exports.insertChallenge = async function (req, res) {
 
             // 챌린지 중복 방지
             const challengeDuplicateCheckInfoRows = await challengeDao.challengeDuplicateCheckInfo(userIdx);
-            console.log(challengeDuplicateCheckInfoRows[0].length);
+            // console.log(challengeDuplicateCheckInfoRows[0].length);
             if(challengeDuplicateCheckInfoRows[0].length > 0){
                 return res.json({
                     isSuccess: false, 

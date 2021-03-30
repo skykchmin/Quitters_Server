@@ -17,14 +17,16 @@ async function insertChallengeCertificationInfo(insertChallengeCertificationInfo
   }
 
   // 챌린지 중간 인증 생성 - 챌린지 생성하자마자
-async function insertChallengeIntermediateCertificationInfo() {
+async function insertChallengeIntermediateCertificationInfo(challengeIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
   const insertChallengeIntermediateCertificationInfoQuery = `
   insert into challengeintermediatecertification(challengeIdx, ChallengeIntermediateCertificationStatus, createdAt)
-  values (last_insert_id(), 0, now())
+  values (?, 0, now())
   `;
+  const insertChallengeIntermediateCertificationInfoParams = [challengeIdx];
   const insertChallengeIntermediateCertificationInfoRows = await connection.query(
-    insertChallengeIntermediateCertificationInfoQuery
+    insertChallengeIntermediateCertificationInfoQuery,
+    insertChallengeIntermediateCertificationInfoParams
   );
   connection.release();
   return insertChallengeIntermediateCertificationInfoRows;

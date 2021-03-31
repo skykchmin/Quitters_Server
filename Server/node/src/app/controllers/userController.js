@@ -270,7 +270,7 @@ exports.changeProfile = async function (req, res) {
     return res.json({isSuccess: false, code: 2026, message: "닉네임에 특수문자는 들어갈 수 없습니다."});
 */
         try {
-            if(profileUrl == "undefined" || profileUrl == null || profileUrl == ""){
+            if(profileUrl == "undefined" || profileUrl == null || profileUrl == "" || profileUrl == "null"){
                 const [userInfo] = await userDao.checkProfile(id);
                 profileUrl = userInfo[0].userProfilePicture;
             }

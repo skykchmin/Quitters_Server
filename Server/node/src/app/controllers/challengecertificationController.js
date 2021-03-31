@@ -746,7 +746,7 @@ exports.patchChallengeCertification = async function (req, res) {
                     for(var i = 0; i<getChallengeCertification_20InfoRows[0].length; i++){
                         // console.log(getChallengeCertification_20InfoRows[0][i]);
                         // console.log(getChallengeCertification_20InfoRows[0][i].challengeCertificationStatus);
-
+                        
                         if(getChallengeCertification_20InfoRows[0][i].challengeCertificationStatus == '1'){
                             successStatusCount++;
                         }

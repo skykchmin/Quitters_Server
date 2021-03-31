@@ -46,7 +46,7 @@ exports.getKakao = async function (req, res) {
                   });
             }
 
-               const nickName = temp.properties.nickname;
+               let nickName = temp.properties.nickname;
                const email = temp.kakao_account.email;
                const profileUrl = temp.properties.profile_image;
 
@@ -56,6 +56,9 @@ exports.getKakao = async function (req, res) {
                     code: 2000,
                     message: "카카오 로그인 실패",
                 });
+               }
+               if (nickName.length <1 || nickName.length > 10){
+                   nickName = "카카오유저";
                }
 
                const userRows = await socialDao.userCheck(email);
@@ -274,6 +277,9 @@ if(email == "undefined" || email == null || email == ""){
         code: 2000,
         message: "구글 로그인 실패",
     });
+   }
+   if (nickName.length <1 || nickName.length > 10){
+       nickName = "구글유저";
    }
 
 try {

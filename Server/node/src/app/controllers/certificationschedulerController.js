@@ -169,7 +169,7 @@ exports.patchAutoChallengeIntermediateCertification = async function (req, res) 
                 var patchAutoChallengeIntermediateCertificationChallengeIdx = getChallengeStatusInfoRows[0][i].challengeIdx; // 챌린지 번호 뽑아오기
                 // console.log(patchAutoChallengeIntermediateCertificationChallengeIdx);
                 const patchAutoChallengeIntermediateCertificationInfoParams = [patchAutoChallengeIntermediateCertificationChallengeIdx];
-                const patchAutoChallengeIntermediateCertificationInfoRows = await challengecertificationDao.patchChallengeIntermediateCertificationSuccessInfo_20(patchAutoChallengeIntermediateCertificationInfoParams);
+                const patchAutoChallengeIntermediateCertificationInfoRows = await challengecertificationDao.patchChallengeIntermediateCertificationSuccessInfo_20_last(patchAutoChallengeIntermediateCertificationInfoParams);
             }
             
             await connection.commit();

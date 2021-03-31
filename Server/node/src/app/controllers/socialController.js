@@ -326,14 +326,16 @@ try {
                  code: 3011,
                  message: "탈퇴 된 계정입니다. 고객센터에 문의해주세요."
              });
-         } else if (!(userInfoRows[0].userLoginMethod == 2)) {
+         }
+         /*
+         else if (!(userInfoRows[0].userLoginMethod == 2)) {
              return res.json({
                  isSuccess: false,
                  code: 3012,
                  message: "다른 소셜 로그인으로 가입된 회원입니다."
              });
          }
-
+*/
      //토큰 생성
      let token = await jwt.sign({
          id: userInfoRows[0].userIdx,

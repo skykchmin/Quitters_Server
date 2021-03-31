@@ -50,6 +50,14 @@ exports.getKakao = async function (req, res) {
                const email = temp.kakao_account.email;
                const profileUrl = temp.properties.profile_image;
 
+               if(email == "undefined" || email == null || email == ""){
+                return res.json({
+                    isSuccess: false,
+                    code: 2000,
+                    message: "카카오 로그인 실패",
+                });
+               }
+
                const userRows = await socialDao.userCheck(email);
     
                if (!(userRows.length > 0)) {
@@ -259,6 +267,14 @@ await admin
 
 
 });
+
+if(email == "undefined" || email == null || email == ""){
+    return res.json({
+        isSuccess: false,
+        code: 2000,
+        message: "구글 로그인 실패",
+    });
+   }
 
 try {
 

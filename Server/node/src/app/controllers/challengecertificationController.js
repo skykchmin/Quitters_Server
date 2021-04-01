@@ -273,7 +273,7 @@ exports.patchChallengeCertification = async function (req, res) {
                     if (registrationTokens.length < 1) {
                         return res.json({
                             isSuccess: true,
-                            code: 1010,
+                            code: 1000,
                             message: "알림 기능을 켜둔 감시자가 없습니다. 챌린지 중간 상태(사용자입력)-실패 변경 성공",
                         });
                     }
@@ -359,7 +359,7 @@ exports.patchChallengeCertification = async function (req, res) {
                     if (registrationTokens.length < 1) {
                         return res.json({
                             isSuccess: true,
-                            code: 1010,
+                            code: 1000,
                             message: "알림 기능을 켜둔 감시자가 없습니다. 챌린지 중간 상태(사용자입력)-실패 변경 성공",
                         });
                     }
@@ -445,7 +445,7 @@ exports.patchChallengeCertification = async function (req, res) {
                     if (registrationTokens.length < 1) {
                         return res.json({
                             isSuccess: true,
-                            code: 1010,
+                            code: 1000,
                             message: "알림 기능을 켜둔 감시자가 없습니다. 챌린지 중간 상태(사용자입력)-실패 변경 성공",
                         });
                     }
@@ -531,7 +531,7 @@ exports.patchChallengeCertification = async function (req, res) {
                     if (registrationTokens.length < 1) {
                         return res.json({
                             isSuccess: true,
-                            code: 1010,
+                            code: 1000,
                             message: "알림 기능을 켜둔 감시자가 없습니다. 챌린지 중간 상태(사용자입력)-실패 변경 성공",
                         });
                     }
@@ -617,7 +617,7 @@ exports.patchChallengeCertification = async function (req, res) {
                     if (registrationTokens.length < 1) {
                         return res.json({
                             isSuccess: true,
-                            code: 1010,
+                            code: 1000,
                             message: "알림 기능을 켜둔 감시자가 없습니다. 챌린지 중간 상태(사용자입력)-실패 변경 성공",
                         });
                     }
@@ -703,7 +703,7 @@ exports.patchChallengeCertification = async function (req, res) {
                     if (registrationTokens.length < 1) {
                         return res.json({
                             isSuccess: true,
-                            code: 1010,
+                            code: 1000,
                             message: "알림 기능을 켜둔 감시자가 없습니다. 챌린지 중간 상태(사용자입력)-실패 변경 성공",
                         });
                     }

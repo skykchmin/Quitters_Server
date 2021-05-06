@@ -1,5 +1,5 @@
-## **Quitters\_Server  
-**
+**Quitters\_Server  
+
 
 Quitters Applicatoin 런칭 프로젝트에 사용된 서버 파트 코드입니다.
 

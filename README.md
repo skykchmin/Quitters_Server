@@ -45,7 +45,13 @@ Quitters Applicatoin 런칭 프로젝트에 사용된 서버 파트 코드입니
 ● 푸시 알림 관리  
 \- 앱 알림을 꺼놓을 수 있으며, 수면 모드를 사용 할 수 있습니다.
 
-
+![1](https://user-images.githubusercontent.com/43941493/117241461-355f3680-ae6e-11eb-8fb5-9b18dd3fe57a.jpg)
+![2](https://user-images.githubusercontent.com/43941493/117241469-385a2700-ae6e-11eb-9749-75cff2630d40.jpg)
+![3](https://user-images.githubusercontent.com/43941493/117241474-3c864480-ae6e-11eb-8a50-12f289fa0e54.jpg)
+![4](https://user-images.githubusercontent.com/43941493/117241480-3d1edb00-ae6e-11eb-907a-19472aab69dc.jpg)
+![5](https://user-images.githubusercontent.com/43941493/117241482-3d1edb00-ae6e-11eb-943c-c2f79bda3b3b.jpg)
+![6](https://user-images.githubusercontent.com/43941493/117241483-3db77180-ae6e-11eb-9b22-2404ba0ab710.jpg)
+![7](https://user-images.githubusercontent.com/43941493/117241486-3db77180-ae6e-11eb-9728-5aa55a80dd85.jpg)
 ---
 
 # **개발 환경**

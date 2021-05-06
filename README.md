@@ -47,7 +47,6 @@ Quitters Applicatoin 런칭 프로젝트에 사용된 서버 파트 코드입니
 ● 푸시 알림 관리  
 \- 앱 알림을 꺼놓을 수 있으며, 수면 모드를 사용 할 수 있습니다.
 
-[##_Image|kage@5sBxL/btq4iMQ2z0Y/QA329Gxai3POPw5oLjFaak/img.webp|alignCenter|data-filename="1.jpg" data-origin-width="527" data-origin-height="937" data-ke-mobilestyle="widthContent"|||_##][##_Image|kage@exFn7y/btq4diXX7NY/AFaqDKUvgfora80yshVX1k/img.webp|alignCenter|data-filename="2.jpg" data-origin-width="527" data-origin-height="937" data-ke-mobilestyle="widthContent"|||_##][##_Image|kage@ETd5b/btq4djvOsez/2irGVb1W8GdKhXwdrwZA81/img.webp|alignCenter|data-filename="3.jpg" data-origin-width="495" data-origin-height="880" data-ke-mobilestyle="widthContent"|||_##][##_Image|kage@cFUVc9/btq4f90iosT/22MT7JhuW2TwyZWztrIEHk/img.webp|alignCenter|data-filename="4.jpg" data-origin-width="495" data-origin-height="880" data-ke-mobilestyle="widthContent"|||_##][##_Image|kage@bGH8cr/btq4hqtVejz/zpakzfRqLg5ES2kkJiyIA0/img.webp|alignCenter|data-filename="5.jpg" data-origin-width="495" data-origin-height="880" data-ke-mobilestyle="widthContent"|||_##][##_Image|kage@cbDqxr/btq4cvwBF3e/VPIVfdEtKr5Xyygvj4Hko0/img.webp|alignCenter|data-filename="6.jpg" data-origin-width="495" data-origin-height="880" data-ke-mobilestyle="widthContent"|||_##][##_Image|kage@9OKXs/btq4dcwy7TN/pxiETNt97FFmv0tU7NgCo1/img.webp|alignCenter|data-filename="7.jpg" data-origin-width="495" data-origin-height="880" data-ke-mobilestyle="widthContent"|||_##]
 
 ---
 

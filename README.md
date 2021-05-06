@@ -1,9 +1,9 @@
-**Quitters\_Server  
+# Quitters\_Server  
 
 
 Quitters Applicatoin 런칭 프로젝트에 사용된 서버 파트 코드입니다.
 
-## **Quitters 소개**
+# **Quitters 소개**
 
 **앱 다운로드 링크: [play.google.com/store/apps/details?id=com.burger.nosmoking.dev](https://play.google.com/store/apps/details?id=com.burger.nosmoking.dev)**
 
@@ -50,7 +50,7 @@ Quitters Applicatoin 런칭 프로젝트에 사용된 서버 파트 코드입니
 
 ---
 
-## **개발 환경**
+# **개발 환경**
 
 **BackEnd**
 

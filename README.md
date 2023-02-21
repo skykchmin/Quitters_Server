@@ -3,6 +3,11 @@
 
 Quitters Applicatoin 런칭 프로젝트에 사용된 서버 파트 코드입니다.
 
+# ERD
+
+![Quitters_20230221_163305](https://user-images.githubusercontent.com/56079377/220277902-3162f770-4ade-422d-bc8c-6d2abdddc679.png)
+
+
 # **Quitters 소개**
 
 **앱 다운로드 링크: [play.google.com/store/apps/details?id=com.burger.nosmoking.dev](https://play.google.com/store/apps/details?id=com.burger.nosmoking.dev)**
